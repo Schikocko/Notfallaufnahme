@@ -1,7 +1,6 @@
 package Krankenhaus;
 
 /**
- * GITHUIBS
  * @author Ulf
  *
  *Diese Klasse erstellt einen neuen Patienten, aktiviert ihn und setzt das erstellen
@@ -26,29 +25,28 @@ public class PatientenErsteller extends SimProcess
 	    */
 	   public void lifeCycle() {
 
-		      // get a reference to the model
-		      ProcessesExample model = (ProcessesExample)getModel();
+		      // wird dem modell zugewiesen
+		      Process model = (Process)getModel();//richtig so?
 
 		      // endless loop:
 		      while (true) {
 
-		         // create a new truck
+		         // erstelle einen neuen Patienten
 		         // Parameters:
-		         // model       = it's part of this model
-		         // "Truck"     = name of the object
-		         // true        = yes please, show the truck in trace file
-		         Truck truck = new Truck(model, "Truck", true);
+		         // model       = Ist ein teil dieses Modell
+		         // "Patient"   = Name der Entität
+		         // true        = der Patient wird getraced
+		         Patient patient = new Patient(model, "Patient", true);
+		         
+                 //TODO hier die Variablen dem Patienten zuordnen?!
+		         
+		         // aktiviert den Patient
+		         patient.activateAfter(this);
 
-		         // now let the newly created truck roll on the parking-lot
-		         // which means we will activate it after this truck generator
-		         truck.activateAfter(this);
-
-		         // wait until next truck arrival is due
-		         hold(new TimeSpan(model.getTruckArrivalTime(), TimeUnit.MINUTES));
-		         // from inside to outside...
-		         // we draw a new inter-arrival time
-		         // we make a TimeSpan object out of it and
-		         // we wait for exactly this period of time
+		         // warte auf die ankunft eines weiteren Patienten
+		         hold(new TimeSpan(model.getPatientAnknuftsZeit(), TimeUnit.MINUTES));
+		         // wartet bis die Patienten anknuftszeit verstrichen ist, 
+		         // um dann den loop erneut zu durchlaufen
 		      }
 
 }
