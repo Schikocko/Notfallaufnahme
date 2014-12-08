@@ -1,7 +1,7 @@
 package Krankenhaus;
 
 /**
- * 
+ * GITHUIBS
  * @author Ulf
  *
  *Diese Klasse erstellt einen neuen Patienten, aktiviert ihn und setzt das erstellen
