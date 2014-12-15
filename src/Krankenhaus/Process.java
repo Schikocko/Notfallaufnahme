@@ -2,6 +2,7 @@ package Krankenhaus;
 
 import desmoj.core.simulator.*;
 import desmoj.core.dist.*;
+import java.util.concurrent.TimeUnit;
 
 public class Process extends Model {
 	
@@ -38,7 +39,7 @@ public class Process extends Model {
 	   /**
 	    * Zufallszeit wie lange die Aufnahme der Patienten dauert
 	    */
-	   private desmoj.core.dist.ContDistUniform AufnahmeZeit;
+	   private desmoj.core.dist.ContDistExponential AufnahmeZeit;
 	   
 	   /**
 	    * Warteschlange, in die sich alle Patienten einriehen um von der 
@@ -76,8 +77,7 @@ public class Process extends Model {
 	    * @return model description as a string
 	    */
 	   public String description() {
-		   return "Einfaches Modell einer Notfallaufnahme mit mehreren Behandlungsräumen,"
-		   		+ "Verschieden Patiententypen und 2 Typen von Ärtzen"
+		   return "Einfaches Modell einer Notfallaufnahme mit mehreren Behandlungsräumen, Verschieden Patiententypen und 2 Typen von Ärtzen";
 	   }
 
 	   /**

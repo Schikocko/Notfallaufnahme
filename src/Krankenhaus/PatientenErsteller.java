@@ -1,4 +1,6 @@
 package Krankenhaus;
+import desmoj.core.simulator.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Ulf
@@ -44,9 +46,10 @@ public class PatientenErsteller extends SimProcess
 		         patient.activateAfter(this);
 
 		         // warte auf die ankunft eines weiteren Patienten
-		         hold(new TimeSpan(model.getPatientAnknuftsZeit(), TimeUnit.MINUTES));
+		         hold(new TimeSpan(model.getPatientAnkunftsZeit(), TimeUnit.MINUTES));
 		         // wartet bis die Patienten anknuftszeit verstrichen ist, 
 		         // um dann den loop erneut zu durchlaufen
 		      }
+	   }
 
 }
