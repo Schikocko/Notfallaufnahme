@@ -1,6 +1,6 @@
 package Krankenhaus;
 import desmoj.core.simulator.*;
-
+//test
 /**
  * 
  * @author Ulf
