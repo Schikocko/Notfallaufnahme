@@ -169,16 +169,16 @@ public class Process extends Model {
 			// erstellt und aktiviert die gegebene Anzahl an routine Ärzten
 		   for (int i=0; i < NUM_AUFN; i++)
 		   {
-		      RoutineBehandlung routineBehandlung = new RoutineBehandlung(this, "routine Arzt", true);
-		      rountineBehandlung.activate(new TimeSpan(30)); 
+			   BehandlungR behandlungR = new BehandlungR(this, "routine Arzt", true);
+			   behandlungK.activate(new TimeSpan(30)); 
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an komplexen Ärzten
 		   for (int i=0; i < NUM_AUFN; i++)
 		   {
-		      KomplexeBehandlung komplexeBehandlung = new komplexeBehandlung(this, "komplexer Arzt", true);
-		      komplexeBehandlung.activate(new TimeSpan(30)); 
+		      BehandlungK behandlungK = new BehandlungK(this, "komplexer Arzt", true);
+		      behandlungK.activate(new TimeSpan(30)); 
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
 		   }
 		   
