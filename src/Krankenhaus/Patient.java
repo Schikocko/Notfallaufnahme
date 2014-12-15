@@ -13,9 +13,9 @@ public class Patient extends SimProcess {
 	
 	//zuweisung der Patientenattribute und Behandlungstypen
 	//TODO Müssen noch randomwerte für die Typen bekommen
-	private int typ;
+	private int typ = 1;
 	
-	private int komplexitaet;
+	private int komplexitaet = 1;
 	
 	private Process myModel;
 	   /**
@@ -33,6 +33,8 @@ public class Patient extends SimProcess {
 	      super(owner, name, showInTrace);
 	      //speichert den referenz, zu welchem Modell die Aufnhame gehört
 	      myModel = (Process)owner;
+	      //Zuordnung der Typen
+
 	   }
 	   
 	   //gibt den Behandlungstyp zurück, für spätere Fallentscheidnung, wo es als nächestes hingeht
@@ -76,6 +78,38 @@ public class Patient extends SimProcess {
 		   
 		   sendTraceNote("Patient wurde Aufgenommen.");
 		   
-		   
+		   //entscheidung ob komplex oder Routine, abhängig von Variable Typ, random aus 0-5 1,2 Komplex 3 4 5 routine
+		   if (this.getKomplexitaet() < 1){ // routine
+			   //wenn routine, in routine warteschlange einfügen
+			   myModel.behandlungRQueue.insert(this);
+			   if (!myModel.untaetigeBehandlungRQueue.isEmpty()) {
+				   //steht zur Verfügung
+				   //nimmt die erste AUfnahmekraft aus der untätigen Queue
+				   BehandlungR behandlungR = myModel.untaetigeBehandlungRQueue.first();
+				   myModel.untaetigeBehandlungRQueue.remove(behandlungR) ;
+				   
+				   //als Nächster beareitet werden
+				   behandlungR.activateAfter(this);
+				  }
+			   //warte darauf, dass Aufnahme frei wird
+			   passivate();
+			   sendTraceNote("Patient wurde routine behandelt.");
+		   }
+		   else //Komplex
+			   //wenn nicht routine -> komplex in Komplexe Warteschlange
+			   myModel.behandlungKQueue.insert(this);
+			   if (!myModel.untaetigeBehandlungKQueue.isEmpty()){
+				   //steht zur Verfügung
+				   //nimmt die erste AUfnahmekraft aus der untätigen Queue
+				   BehandlungK behandlungK = myModel.untaetigeBehandlungKQueue.first();
+				   myModel.untaetigeBehandlungKQueue.remove(behandlungK) ;
+				   
+				   //als Nächster beareitet werden
+				   behandlungK.activateAfter(this);
+				  }
+			   //warte darauf, dass Aufnahme frei wird
+			   passivate();
+			   sendTraceNote("Patient wurde Komplex behandelt.");
 	   }
+	   //TODO Lifecycle weiterführen, mit gips, röntgen und weiterer behandlung
 }

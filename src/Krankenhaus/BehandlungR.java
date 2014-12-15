@@ -55,13 +55,13 @@ public class BehandlungR extends SimProcess {
 	         else {
 	        	 //ein Patient wartet
 	        	 //ersten Patienten aus der Queue nehmen
-	        	 Patient naechsterPatient =myModel.behandlungRQueue.first();
-	        	 myModel.behandlungRQueue.remove(naechsterPatient);
+	        	 Patient naechsterPatientBehR =myModel.behandlungRQueue.first();
+	        	 myModel.behandlungRQueue.remove(naechsterPatientBehR);
 	        	 //bearbeitung des Patienten
 	        	 hold(new TimeSpan(myModel.getBehandlungszeitR(), TimeUnit.MINUTES));
 	        	 
 	        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
-	        	 naechsterPatient.activate(new TimeSpan (0.0));
+	        	 naechsterPatientBehR.activate(new TimeSpan (0.0));
 	        	 
 	         } 
 	         }

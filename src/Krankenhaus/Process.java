@@ -272,6 +272,8 @@ public class Process extends Model {
 	    */
 	   public void init() 
 	   {
+		 
+		   
 		// erstellt  die Aufnahmezeit
 		   // Parameters:
 		   // this                     = belongs to this model
