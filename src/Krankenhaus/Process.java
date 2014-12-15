@@ -34,8 +34,32 @@ public class Process extends Model {
 	   /**
 	    * Zufallszahl für die Zeit der Anknuft der Patienten
 	    */
+	   
+	   /**
+	    * Model Parameter: Anzahl der routine Ärtze
+	    */
+	   protected static int NUM_DOC_R = 2 ;
+	   
+	   /**
+	    * Model Parameter: Anzahl der Komplexer Ärtze
+	    */
+	   protected static int NUM_DOC_K = 2;
+	   
+	   /**
+	    * Zeit bis ein neuer Patient ankommt
+	    */
 	   private desmoj.core.dist.ContDistExponential patientAnkunftszeit;
 	
+	   /**
+	    * Behandlungszeit routine
+	    */
+	   private desmoj.core.dist.ContDistExponential behandlungszeitR; 
+	   
+	   /**
+	    * Behandlungszeit komplex
+	    */
+	   private desmoj.core.dist.ContDistExponential behandlungszeitK;
+	   
 	   /**
 	    * Zufallszeit wie lange die Aufnahme der Patienten dauert
 	    */
@@ -48,9 +72,31 @@ public class Process extends Model {
 	   protected desmoj.core.simulator.ProcessQueue<Patient> aufnahmeQueue;
 	   
 	   /**
+	    * Warteschlange, in die sich alle Patienten einriehen um von der 
+	    * routine Behanldung bedient zu werden
+	    */
+	   protected desmoj.core.simulator.ProcessQueue<Patient> behandlungRQueue;
+	  
+	   /**
+	    * Warteschlange, in die sich alle Patienten einriehen um von der 
+	    * komplex Behanldung bedient zu werden
+	    */
+	   protected desmoj.core.simulator.ProcessQueue<Patient> behandlungKQueue;
+	   
+	   /**
 	    * Warteschlange für untätige Aufnahmekräfte, sie warten auf die Ankunft neuer Patienten
 	    */
 	   protected desmoj.core.simulator.ProcessQueue<Aufnahme> untaetigeAufnahmeQueue;
+	   
+	   /**
+	    * Warteschlange für untätige routine Ärtze, sie warten auf die Ankunft neuer Patienten
+	    */
+	   protected desmoj.core.simulator.ProcessQueue<BehandlungR> untaetigeBehandlungRQueue;
+	   
+	   /**
+	    * Warteschlange für untätige komplexe Ärtze, sie warten auf die Ankunft neuer Patienten
+	    */
+	   protected desmoj.core.simulator.ProcessQueue<BehandlungK> untaetigeBehandlungKQueue;
 	   
 	   /**
 	    * Gibt ein Beispiel der Aufnahmezeit eines Patienten zurück
@@ -70,6 +116,26 @@ public class Process extends Model {
 	   public double getPatientAnkunftsZeit() 
 	   {
 	      return patientAnkunftszeit.sample();
+	   }
+	   
+	   /**
+	    * Gibt ein Beispiel der Behnalungszeit eines routine Patienten zurück
+	    * 
+	    * @return double Behandlungszeitbeispiel
+	    */
+	   public double getBehandlungszeitR() 
+	   {
+	      return behandlungszeitR.sample();
+	   }	 
+	   
+	   /**
+	    * Gibt ein Beispiel der Behnalungszeit eines komplexen Patienten zurück
+	    * 
+	    * @return double Behandlungszeitbeispiel
+	    */
+	   public double getBehandlungszeitK() 
+	   {
+	      return behandlungszeitK.sample();
 	   }
 	   
 	   /**
@@ -99,6 +165,24 @@ public class Process extends Model {
 		      aufnahme.activate(new TimeSpan(0));
 		         // Wird sofort aktiviert, da die Aufnahme sofort anfängt zu Arbeiten
 		   }
+		   
+			// erstellt und aktiviert die gegebene Anzahl an routine Ärzten
+		   for (int i=0; i < NUM_AUFN; i++)
+		   {
+		      RoutineBehandlung routineBehandlung = new RoutineBehandlung(this, "routine Arzt", true);
+		      rountineBehandlung.activate(new TimeSpan(30)); 
+		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
+		   }
+		   
+			// erstellt und aktiviert die gegebene Anzahl an komplexen Ärzten
+		   for (int i=0; i < NUM_AUFN; i++)
+		   {
+		      KomplexeBehandlung komplexeBehandlung = new komplexeBehandlung(this, "komplexer Arzt", true);
+		      komplexeBehandlung.activate(new TimeSpan(30)); 
+		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
+		   }
+		   
+		   
 		   //erstellt und aktiviert den Patientenersteller
 		   PatientenErsteller ersteller = new PatientenErsteller(this,"PatientenAnknuft",false);
 		   ersteller.activate(new TimeSpan(0));
@@ -118,6 +202,8 @@ public class Process extends Model {
 		   // true                     = show in report?
 		   // false                    = show in trace?
 		   AufnahmeZeit= new ContDistExponential(this, "AufnahmezeitStream", 0.6 , true, false);
+		   //AUfnahmezeiten dürfen nicht negativ sein
+		   AufnahmeZeit.setNonNegative (true);
 		   
 		// erstellt  die Patientenankunftszeit
 		   // Parameters:
@@ -130,6 +216,28 @@ public class Process extends Model {
 		   //Anknuftszeiten dürfen nicht negativ sein
 		   patientAnkunftszeit.setNonNegative (true);
 		   
+			// erstellt  die Komplexbehandlungszeit
+		   // Parameters:
+		   // this                          = belongs to this model
+		   // "behandlungszeitKStream"   = the name of the stream
+		   // 4.6                           = Durchschnittszeit in der neue Patienten das System betreten
+		   // true                          = show in report?
+		   // false                         = show in trace?
+		   behandlungszeitK= new ContDistExponential(this, "behandlungszeitKStream", 4.6 , true, false);
+		   //Behnadlungszeiten dürfen nicht negativ sein
+		   behandlungszeitK.setNonNegative (true);
+		   
+			// erstellt  die routinebehandlungszeit
+		   // Parameters:
+		   // this                          = belongs to this model
+		   // "behandlungszeitRStream"   = the name of the stream
+		   // 4.6                           = Durchschnittszeit in der neue Patienten das System betreten
+		   // true                          = show in report?
+		   // false                         = show in trace?
+		   behandlungszeitR= new ContDistExponential(this, "behandlungszeitRStream", 3.2 , true, false);
+		   //Behnadlungszeiten dürfen nicht negativ sein
+		   behandlungszeitR.setNonNegative (true);
+		   
 		   // erstellt eine neue AufnahmeQueue
 		   // Parameters:
 		   // this          = belongs to this model
@@ -138,6 +246,22 @@ public class Process extends Model {
 		   // true          = show in trace?
 		   aufnahmeQueue = new ProcessQueue<Patient>(this, "aufnahmeQueue", true, true);
 		   
+		   // erstellt eine neue Rountine Behandlung
+		   // Parameters:
+		   // this          = belongs to this model
+		   // "behandlungRQueue" = the name of the Queue
+		   // true          = show in report?
+		   // true          = show in trace?
+		   behandlungRQueue = new ProcessQueue<Patient>(this, "behandlungRQueue", true, true);
+		   
+		   // erstellt eine neue komplex Behandlung
+		   // Parameters:
+		   // this          = belongs to this model
+		   // "behandlungKQueue" = the name of the Queue
+		   // true          = show in report?
+		   // true          = show in trace?
+		   behandlungKQueue = new ProcessQueue<Patient>(this, "behandlungKQueue", true, true);
+		   
 		   // erstellt eine neue untaetigeAufnahmeQueue
 		   // Parameters:
 		   // this          = belongs to this model
@@ -145,6 +269,22 @@ public class Process extends Model {
 		   // true          = show in report?
 		   // true          = show in trace?
 		   untaetigeAufnahmeQueue = new ProcessQueue<Aufnahme>(this, "untaetigeAufnahmeQueue", true, true);
+		   
+		   // erstellt eine neue untaetigeBehandlungRQueue
+		   // Parameters:
+		   // this          = belongs to this model
+		   // "untaetigeBehandlungRQueue" = the name of the Queue
+		   // true          = show in report?
+		   // true          = show in trace?
+		   untaetigeBehandlungRQueue = new ProcessQueue<BehandlungR>(this, "untaetigeBehandlungRQueue", true, true);
+		   
+		   // erstellt eine neue untaetigeBehandlungKQueue
+		   // Parameters:
+		   // this          = belongs to this model
+		   // "untaetigeBehandlungKQueue" = the name of the Queue
+		   // true          = show in report?
+		   // true          = show in trace?
+		   untaetigeBehandlungKQueue = new ProcessQueue<BehandlungR>(this, "untaetigeBehandlungKQueue", true, true);
 	   }
 	   
 	   public static void main(java.lang.String[] args) 
