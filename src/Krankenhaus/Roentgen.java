@@ -6,7 +6,7 @@ import desmoj.core.simulator.*;
 public class Roentgen extends SimProcess {
 	
 	/**
-	 * routine Roentgenen der Patienten
+	 * routine Roentgen der Patienten
 	 */
 	
 	private Process myModel;
