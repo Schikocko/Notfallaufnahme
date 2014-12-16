@@ -1,4 +1,5 @@
 package Krankenhaus;
+import desmoj.core.dist.ContDistUniform;
 import desmoj.core.simulator.*;
 //test
 /**
@@ -12,10 +13,9 @@ import desmoj.core.simulator.*;
 public class Patient extends SimProcess {
 	
 	//zuweisung der Patientenattribute und Behandlungstypen
-	//TODO Müssen noch randomwerte für die Typen bekommen
-	private int typ;
+	private desmoj.core.dist.ContDistUniform typ ;
 	
-	private int komplexitaet;
+	private desmoj.core.dist.ContDistUniform komplexitaet;
 	
 	private Process myModel;
 	   /**
@@ -33,16 +33,21 @@ public class Patient extends SimProcess {
 	      super(owner, name, showInTrace);
 	      //speichert den referenz, zu welchem Modell die Aufnhame gehört
 	      myModel = (Process)owner;
+	      //Zuordnung der Typen
+	      //1-35 Röntgen 36-55 GipsENtfernen 56-60 GipsNeu 61-100 Wunderverband
+	      typ =  new ContDistUniform(myModel, "Behandlungstyp", 1, 100, true, true);
+	      //1-4 Komplex 5-10 Routine
+	      komplexitaet = new ContDistUniform(myModel, "Komplexität", 1, 10, true, true);
 	   }
 	   
 	   //gibt den Behandlungstyp zurück, für spätere Fallentscheidnung, wo es als nächestes hingeht
-	   public int getTyp(){
-		   return typ;
+	   public Double getTyp(){
+		   return typ.sample();
 	   }
 	   
 	 //gibt die Komplexität zurück, für spätere Fallentscheidnung, wo es als nächestes hingeht
-	   public int getKomplexitaet(){
-		   return komplexitaet;
+	   public double getKomplexitaet(){
+		   return komplexitaet.sample();
 	   }
 	   
 	   /**
@@ -55,6 +60,12 @@ public class Patient extends SimProcess {
 	    */
 
 	   public void lifeCycle() {
+		   //dauerhafte zuweisung eines zufälligen Typen
+		   double myTyp = this.getTyp();
+		   
+		   //dauerhafte zuweisung einer zufälligen Komplexität
+		   double myKomplaxitaet = this.getKomplexitaet();
+		   
 		   //betreten des Systems, Aufnahmewarteschlange
 		   myModel.aufnahmeQueue.insert(this);
 		   sendTraceNote ("Aufnahme Warteschlange: " + myModel.aufnahmeQueue.length());
@@ -76,6 +87,160 @@ public class Patient extends SimProcess {
 		   
 		   sendTraceNote("Patient wurde Aufgenommen.");
 		   
+		   //entscheidung ob komplex oder Routine, abhängig von Variable Typ, random aus 0-5 1,2 Komplex 3 4 5 routine
+		   if (myKomplaxitaet >= 5){ // routine 5-10
+			   //wenn routine, in routine warteschlange einfügen
+			   myModel.behandlungRQueue.insert(this);
+			   sendTraceNote ("Routine Behalndlungs Warteschlange: " + myModel.behandlungRQueue.length());
+			   if (!myModel.untaetigeBehandlungRQueue.isEmpty()) {
+				   //steht zur Verfügung
+				   //nimmt die erste AUfnahmekraft aus der untätigen Queue
+				   BehandlungR behandlungR = myModel.untaetigeBehandlungRQueue.first();
+				   myModel.untaetigeBehandlungRQueue.remove(behandlungR) ;
+				   
+				   //als Nächster beareitet werden
+				   behandlungR.activateAfter(this);
+				  }
+			   //warte darauf, dass Aufnahme frei wird
+			   passivate();
+			   sendTraceNote("Patient wurde routine behandelt.");
+		   }
+		   else //Komplex 1-4
+			   //wenn nicht routine -> komplex in Komplexe Warteschlange
+			   myModel.behandlungKQueue.insert(this);
+		       sendTraceNote ("Komplexe Behalndlungs Warteschlange: " + myModel.behandlungKQueue.length());
+			   if (!myModel.untaetigeBehandlungKQueue.isEmpty()){
+				   //steht zur Verfügung
+				   //nimmt die erste AUfnahmekraft aus der untätigen Queue
+				   BehandlungK behandlungK = myModel.untaetigeBehandlungKQueue.first();
+				   myModel.untaetigeBehandlungKQueue.remove(behandlungK) ;
+				   
+				   //als Nächster beareitet werden
+				   behandlungK.activateAfter(this);
+				  }
+			   //warte darauf, dass Aufnahme frei wird
+			   passivate();
+			   sendTraceNote("Patient wurde Komplex behandelt.");
+	   	   
+	   //weiter für typ gips entfernen 36-55
+	   if (myTyp > 35 && myTyp < 56)
+	   {
+		   //wenn Typ zwischen 36-55 dann in die Gips Warteschlange
+		   myModel.gipsQueue.insert(this);
+		   sendTraceNote ("Gips Warteschlange: " + myModel.gipsQueue.length());
+		   
+		   //überprüfung, ob Gipspfleger zur verfügung steht
+		   if (!myModel.untaetigeGipsQueue.isEmpty()) {
+			   //steht zur Verfügung
+			   //nimmt den ersten Gipspfleger aus der untätigen Queue
+			   Gips gips = myModel.untaetigeGipsQueue.first();
+			   myModel.untaetigeGipsQueue.remove(gips) ;
+			   
+			   //als Nächster beareitet werden
+			   gips.activateAfter(this);
+			  }
+		   //warte darauf, dass Aufnahme frei wird
+		   passivate();
 		   
 	   }
+	   //nach der Behnadlung Röntgen für Röntgen(1-35) und GipsNeu(56-60)
+	   if (myTyp < 36 || (myTyp > 55 && myTyp < 60))
+	   {
+		 //wenn Typ zwischen Röntgen(1-35) und GipsNeu(56-60) dann in die Röntgen Warteschlange
+		   myModel.roentgenQueue.insert(this);
+		   sendTraceNote ("Röntgen Warteschlange: " + myModel.roentgenQueue.length());
+		   
+		   //überprüfung, ob Gipspfleger zur verfügung steht
+		   if (!myModel.untaetigeRoentgenQueue.isEmpty()) {
+			   //steht zur Verfügung
+			   //nimmt den ersten Gipspfleger aus der untätigen Queue
+			   Roentgen roentgen = myModel.untaetigeRoentgenQueue.first();
+			   myModel.untaetigeRoentgenQueue.remove(roentgen) ;
+			   
+			   //als Nächster beareitet werden
+			   roentgen.activateAfter(this);
+			  }
+		   //warte darauf, dass Aufnahme frei wird
+		   passivate();
+	   }
+	   
+	   //weiter für typ GipsNeu  56-60
+	   if (myTyp > 56 && myTyp < 60)
+	   {
+		   //wenn Typ zwischen 56-60 dann in die Gips Warteschlange
+		   myModel.gipsQueue.insert(this);
+		   sendTraceNote ("GipsNeu Warteschlange: " + myModel.gipsQueue.length());
+		   
+		   //überprüfung, ob Gipspfleger zur verfügung steht
+		   if (!myModel.untaetigeGipsQueue.isEmpty()) {
+			   //steht zur Verfügung
+			   //nimmt den ersten Gipspfleger aus der untätigen Queue
+			   Gips gips = myModel.untaetigeGipsQueue.first();
+			   myModel.untaetigeGipsQueue.remove(gips) ;
+			   
+			   //als Nächster beareitet werden
+			   gips.activateAfter(this);
+			  }
+		   //warte darauf, dass Aufnahme frei wird
+		   passivate();
+	   }
+	   //Nach GipsNeu erneutes Röntgen
+	   if (myTyp > 55 && myTyp < 60)
+	   {
+		 //wenn Typ zwischen GipsNeu(56-60) dann in die Röntgen Warteschlange
+		   myModel.roentgenQueue.insert(this);
+		   sendTraceNote ("Röntgen nach Gips Warteschlange: " + myModel.roentgenQueue.length());
+		   
+		   //überprüfung, ob Gipspfleger zur verfügung steht
+		   if (!myModel.untaetigeRoentgenQueue.isEmpty()) {
+			   //steht zur Verfügung
+			   //nimmt den ersten Gipspfleger aus der untätigen Queue
+			   Roentgen roentgen = myModel.untaetigeRoentgenQueue.first();
+			   myModel.untaetigeRoentgenQueue.remove(roentgen) ;
+			   
+			   //als Nächster beareitet werden
+			   roentgen.activateAfter(this);
+			  }
+		   //warte darauf, dass Aufnahme frei wird
+		   passivate();
+	   }
+	 //2te Behandlung nach Gips Neu oder Röntgen  
+	 //entscheidung ob komplex oder Routine, abhängig von Variable Typ, random aus 0-5 1,2 Komplex 3 4 5 routine
+	   if (myKomplaxitaet >= 5){ // routine 5-10
+		   //wenn routine, in routine warteschlange einfügen
+		   myModel.behandlungRQueue.insert(this);
+		   sendTraceNote ("Routine Behalndlungs Warteschlange: " + myModel.behandlungRQueue.length());
+		   if (!myModel.untaetigeBehandlungRQueue.isEmpty()) {
+			   //steht zur Verfügung
+			   //nimmt die erste AUfnahmekraft aus der untätigen Queue
+			   BehandlungR behandlungR = myModel.untaetigeBehandlungRQueue.first();
+			   myModel.untaetigeBehandlungRQueue.remove(behandlungR) ;
+			   
+			   //als Nächster beareitet werden
+			   behandlungR.activateAfter(this);
+			  }
+		   //warte darauf, dass Aufnahme frei wird
+		   passivate();
+		   sendTraceNote("Patient wurde 2tes mal routine behandelt.");
+	   }
+	   else //Komplex 1-4
+		   //wenn nicht routine -> komplex in Komplexe Warteschlange
+		   myModel.behandlungKQueue.insert(this);
+	       sendTraceNote ("Komplexe Behalndlungs Warteschlange: " + myModel.behandlungKQueue.length());
+		   if (!myModel.untaetigeBehandlungKQueue.isEmpty()){
+			   //steht zur Verfügung
+			   //nimmt die erste AUfnahmekraft aus der untätigen Queue
+			   BehandlungK behandlungK = myModel.untaetigeBehandlungKQueue.first();
+			   myModel.untaetigeBehandlungKQueue.remove(behandlungK) ;
+			   
+			   //als Nächster beareitet werden
+			   behandlungK.activateAfter(this);
+			  }
+		   //warte darauf, dass Aufnahme frei wird
+		   passivate();
+		   sendTraceNote("Patient wurde 2tes mal komplex behandelt.");
+	   
+	   
+	   }
+	   
 }
