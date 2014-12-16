@@ -27,9 +27,8 @@ public class PatientenErsteller extends SimProcess
 	    */
 	   public void lifeCycle() {
 
-		      // wird dem modell zugewiesen
-		      Process model = (Process)getModel();//richtig so?
-
+		      // wird dem modell zugewiesen, in festgelegem Abstand
+		      Process model = (Process)getModel();
 		      // endless loop:
 		      while (true) {
 
@@ -39,9 +38,7 @@ public class PatientenErsteller extends SimProcess
 		         // "Patient"   = Name der Entität
 		         // true        = der Patient wird getraced
 		         Patient patient = new Patient(model, "Patient", true);
-		         
-                 //TODO hier die Variablen dem Patienten zuordnen?!
-		         
+		         		         
 		         // aktiviert den Patient
 		         patient.activateAfter(this);
 
