@@ -105,7 +105,8 @@ public class Patient extends SimProcess {
 			   passivate();
 			   sendTraceNote("Patient wurde routine behandelt.");
 		   }
-		   else //Komplex 1-4
+		   else
+		   {//Komplex 1-4
 			   //wenn nicht routine -> komplex in Komplexe Warteschlange
 			   myModel.behandlungKQueue.insert(this);
 		       sendTraceNote ("Komplexe Behalndlungs Warteschlange: " + myModel.behandlungKQueue.length());
@@ -121,7 +122,7 @@ public class Patient extends SimProcess {
 			   //warte darauf, dass Aufnahme frei wird
 			   passivate();
 			   sendTraceNote("Patient wurde Komplex behandelt.");
-	   	   
+		   }
 	   //weiter für typ gips entfernen 36-55
 	   if (myTyp > 35 && myTyp < 56)
 	   {
@@ -208,6 +209,7 @@ public class Patient extends SimProcess {
 	 //entscheidung ob komplex oder Routine, abhängig von Variable Typ, random aus 0-5 1,2 Komplex 3 4 5 routine
 	   if (myKomplaxitaet >= 5){ // routine 5-10
 		   //wenn routine, in routine warteschlange einfügen
+		   //TODO PrioQueue für 2te behandlung
 		   myModel.behandlungRQueue.insert(this);
 		   sendTraceNote ("Routine Behalndlungs Warteschlange: " + myModel.behandlungRQueue.length());
 		   if (!myModel.untaetigeBehandlungRQueue.isEmpty()) {
@@ -223,8 +225,10 @@ public class Patient extends SimProcess {
 		   passivate();
 		   sendTraceNote("Patient wurde 2tes mal routine behandelt.");
 	   }
-	   else //Komplex 1-4
+	   else
+	   {//Komplex 1-4
 		   //wenn nicht routine -> komplex in Komplexe Warteschlange
+		   //TODO PrioQueue für 2te behandlung
 		   myModel.behandlungKQueue.insert(this);
 	       sendTraceNote ("Komplexe Behalndlungs Warteschlange: " + myModel.behandlungKQueue.length());
 		   if (!myModel.untaetigeBehandlungKQueue.isEmpty()){
@@ -239,7 +243,7 @@ public class Patient extends SimProcess {
 		   //warte darauf, dass Aufnahme frei wird
 		   passivate();
 		   sendTraceNote("Patient wurde 2tes mal komplex behandelt.");
-	   
+	   }
 	   
 	   }
 	   
