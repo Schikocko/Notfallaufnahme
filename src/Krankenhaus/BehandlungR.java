@@ -45,15 +45,28 @@ public class BehandlungR extends SimProcess {
 
 	      // Aufnahme beginnt arbeit mit modellstart
 	      while (true) {
-	         // überprüfung, ob jemand wartet
-	         if (myModel.behandlungRQueue.isEmpty()) {
+	         // überprüfung, ob jemand in einer der beiden Queues wartet
+	         if (myModel.behandlungRQueue.isEmpty() && myModel.prioBehandlungRQueue.isEmpty()) {
 	        	 //keiner wartet
 	        	 //in üntätigeAufnahme Wartetschlange einfügen
 	        	 myModel.untaetigeBehandlungRQueue.insert(this);
 	        	 passivate(); //warte bis vom Patient reaktiviert
 	         }
 	         else {
-	        	 //ein Patient wartet
+	        	 if (!myModel.prioBehandlungRQueue.isEmpty())
+	        	 {
+	        		//ein Patient wartet in der PrioQueue
+		        	 //ersten Patienten aus der Queue nehmen
+		        	 Patient naechsterPatientBehR =myModel.prioBehandlungRQueue.first();
+		        	 myModel.prioBehandlungRQueue.remove(naechsterPatientBehR);
+		        	 //bearbeitung des Patienten
+		        	 hold(new TimeSpan(myModel.getBehandlungszeitR(), TimeUnit.MINUTES));
+		        	 
+		        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
+		        	 naechsterPatientBehR.activate(new TimeSpan (0.0));
+	        	 }else
+	        	 {
+	        	 //ein Patient wartet in der normalen Queue
 	        	 //ersten Patienten aus der Queue nehmen
 	        	 Patient naechsterPatientBehR =myModel.behandlungRQueue.first();
 	        	 myModel.behandlungRQueue.remove(naechsterPatientBehR);
@@ -62,7 +75,7 @@ public class BehandlungR extends SimProcess {
 	        	 
 	        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
 	        	 naechsterPatientBehR.activate(new TimeSpan (0.0));
-	        	 
+	        	 }
 	         } 
 	         }
 	      }

@@ -99,10 +99,22 @@ public class Process extends Model {
 	  
 	   /**
 	    * Warteschlange, in die sich alle Patienten einriehen um von der 
+	    * routine Behanldung ein 2tes mal mit hoher Priorität bedient zu werden
+	    */
+	   protected desmoj.core.simulator.ProcessQueue<Patient> prioBehandlungRQueue;
+	  
+	   /**
+	    * Warteschlange, in die sich alle Patienten einriehen um von der 
 	    * komplex Behanldung bedient zu werden
 	    */
 	   protected desmoj.core.simulator.ProcessQueue<Patient> behandlungKQueue;
-	   
+
+	   /**
+	    * Warteschlange, in die sich alle Patienten einriehen um von der 
+	    * komplex Behanldung ein 2tes mal mit hoher Priorität bedient zu werden
+	    */
+	   protected desmoj.core.simulator.ProcessQueue<Patient> prioBehandlungKQueue;
+
 	   /**
 	    * Warteschlange, in die sich alle Patienten einriehen um von der 
 	    * Gips bedient zu werden
@@ -261,14 +273,14 @@ public class Process extends Model {
 		   }
 		   
 		   
-		   //erstellt und aktiviert den Patientenersteller
+		   //erstellt undw aktiviert den Patientenersteller
 		   PatientenErsteller ersteller = new PatientenErsteller(this,"PatientenAnknuft",false);
 		   ersteller.activate(new TimeSpan(0));
 		   	    // Wird sofort aktiviert, das Patienten mit start unserer Simulation ankommen
 	   }
 
 	   /**
-	    * Initialises static model components like distributions and queues.
+	    * Initialises static model components: distributions and queues.
 	    */
 	   public void init() 
 	   {
@@ -356,6 +368,14 @@ public class Process extends Model {
 		   // true          = show in trace?
 		   behandlungRQueue = new ProcessQueue<Patient>(this, "behandlungRQueue", true, true);
 		   
+		   // erstellt eine neue Prioritäts Rountine Behandlung Warteschlange
+		   // Parameters:
+		   // this          = belongs to this model
+		   // "prioBehandlungRQueue" = the name of the Queue
+		   // true          = show in report?
+		   // true          = show in trace?
+		   prioBehandlungRQueue = new ProcessQueue<Patient>(this, "prioBehandlungRQueue", true, true);
+		   
 		   // erstellt eine neue komplex Behandlung Warteschlange
 		   // Parameters:
 		   // this          = belongs to this model
@@ -363,6 +383,14 @@ public class Process extends Model {
 		   // true          = show in report?
 		   // true          = show in trace?
 		   behandlungKQueue = new ProcessQueue<Patient>(this, "behandlungKQueue", true, true);
+		   
+		   // erstellt eine neue komplex Behandlung Warteschlange
+		   // Parameters:
+		   // this          = belongs to this model
+		   // "prioBehandlungKQueue" = the name of the Queue
+		   // true          = show in report?
+		   // true          = show in trace?
+		   prioBehandlungKQueue = new ProcessQueue<Patient>(this, "prioBehandlungKQueue", true, true);
 		   
 		   // erstellt eine neue Gips Warteschlange
 		   // Parameters:

@@ -64,10 +64,11 @@ public class Patient extends SimProcess {
 		   double myTyp = this.getTyp();
 		   
 		   //dauerhafte zuweisung einer zufälligen Komplexität
-		   double myKomplaxitaet = this.getKomplexitaet();
+		   double myKomplexitaet = this.getKomplexitaet();
 		   
 		   //betreten des Systems, Aufnahmewarteschlange
 		   myModel.aufnahmeQueue.insert(this);
+		   sendTraceNote ("Typ:" + myTyp);
 		   sendTraceNote ("Aufnahme Warteschlange: " + myModel.aufnahmeQueue.length());
 		   
 		   //überprüfung, ob Aufnahmekraft zur verfügung steht
@@ -80,15 +81,16 @@ public class Patient extends SimProcess {
 			   //als Nächster beareitet werden
 			   aufnahme.activateAfter(this);
 			  }
-		   //warte darauf, dass Aufnahme frei wird
+ 		   //warte darauf, dass Aufnahme frei wird
 		   passivate();
 		   
 		   // hiernach wurde man von der Aufnahme wieder Aktiviert, und hat die Aufnahme hinter sich
 		   
 		   sendTraceNote("Patient wurde Aufgenommen.");
 		   
+		   
 		   //entscheidung ob komplex oder Routine, abhängig von Variable Typ, random aus 0-5 1,2 Komplex 3 4 5 routine
-		   if (myKomplaxitaet >= 5){ // routine 5-10
+		   if (myKomplexitaet >= 5){ // routine 5-10
 			   //wenn routine, in routine warteschlange einfügen
 			   myModel.behandlungRQueue.insert(this);
 			   sendTraceNote ("Routine Behalndlungs Warteschlange: " + myModel.behandlungRQueue.length());
@@ -101,10 +103,12 @@ public class Patient extends SimProcess {
 				   //als Nächster beareitet werden
 				   behandlungR.activateAfter(this);
 				  }
+			   			   
 			   //warte darauf, dass Aufnahme frei wird
 			   passivate();
 			   sendTraceNote("Patient wurde routine behandelt.");
-		   }
+			   }
+		   
 		   else
 		   {//Komplex 1-4
 			   //wenn nicht routine -> komplex in Komplexe Warteschlange
@@ -119,10 +123,12 @@ public class Patient extends SimProcess {
 				   //als Nächster beareitet werden
 				   behandlungK.activateAfter(this);
 				  }
+			   
 			   //warte darauf, dass Aufnahme frei wird
 			   passivate();
 			   sendTraceNote("Patient wurde Komplex behandelt.");
 		   }
+		   
 	   //weiter für typ gips entfernen 36-55
 	   if (myTyp > 35 && myTyp < 56)
 	   {
@@ -142,10 +148,11 @@ public class Patient extends SimProcess {
 			  }
 		   //warte darauf, dass Aufnahme frei wird
 		   passivate();
-		   
+		   sendTraceNote ("Patient war beim Gips");
 	   }
+	   
 	   //nach der Behnadlung Röntgen für Röntgen(1-35) und GipsNeu(56-60)
-	   if (myTyp < 36 || (myTyp > 55 && myTyp < 60))
+	   if (myTyp < 36 || (myTyp > 55 && myTyp <= 60))
 	   {
 		 //wenn Typ zwischen Röntgen(1-35) und GipsNeu(56-60) dann in die Röntgen Warteschlange
 		   myModel.roentgenQueue.insert(this);
@@ -163,10 +170,11 @@ public class Patient extends SimProcess {
 			  }
 		   //warte darauf, dass Aufnahme frei wird
 		   passivate();
+		   sendTraceNote ("Patient wurde geröngt");
 	   }
 	   
 	   //weiter für typ GipsNeu  56-60
-	   if (myTyp > 56 && myTyp < 60)
+	   if (myTyp > 56 && myTyp <= 60)
 	   {
 		   //wenn Typ zwischen 56-60 dann in die Gips Warteschlange
 		   myModel.gipsQueue.insert(this);
@@ -184,9 +192,11 @@ public class Patient extends SimProcess {
 			  }
 		   //warte darauf, dass Aufnahme frei wird
 		   passivate();
+		   sendTraceNote("Patient wurde für GipsNeu behandelt");
 	   }
+	   
 	   //Nach GipsNeu erneutes Röntgen
-	   if (myTyp > 55 && myTyp < 60)
+	   if (myTyp > 55 && myTyp <= 60)
 	   {
 		 //wenn Typ zwischen GipsNeu(56-60) dann in die Röntgen Warteschlange
 		   myModel.roentgenQueue.insert(this);
@@ -204,14 +214,16 @@ public class Patient extends SimProcess {
 			  }
 		   //warte darauf, dass Aufnahme frei wird
 		   passivate();
+		   sendTraceNote ("Patient wurde nach Gips geröngt");
 	   }
+	   
 	 //2te Behandlung nach Gips Neu oder Röntgen  
 	 //entscheidung ob komplex oder Routine, abhängig von Variable Typ, random aus 0-5 1,2 Komplex 3 4 5 routine
-	   if (myKomplaxitaet >= 5){ // routine 5-10
+	   if (myKomplexitaet >= 5){ // routine 5-10
 		   //wenn routine, in routine warteschlange einfügen
-		   //TODO PrioQueue für 2te behandlung
-		   myModel.behandlungRQueue.insert(this);
-		   sendTraceNote ("Routine Behalndlungs Warteschlange: " + myModel.behandlungRQueue.length());
+		   //einfüügen in PrioQueue für 2te behandlung
+		   myModel.prioBehandlungRQueue.insert(this);
+		   sendTraceNote ("Priotitäts Routine Behalndlungs Warteschlange: " + myModel.prioBehandlungRQueue.length());
 		   if (!myModel.untaetigeBehandlungRQueue.isEmpty()) {
 			   //steht zur Verfügung
 			   //nimmt die erste AUfnahmekraft aus der untätigen Queue
@@ -224,13 +236,21 @@ public class Patient extends SimProcess {
 		   //warte darauf, dass Aufnahme frei wird
 		   passivate();
 		   sendTraceNote("Patient wurde 2tes mal routine behandelt.");
+		   
+		   if (myTyp > 55 && myTyp <= 60)//aussage welche Behandlung abgeschlossen wurde
+		   {
+			   sendTraceNote ("Ende der des Krankenhausbesuchs GipsNeu");
+		   }else
+		   {
+			   sendTraceNote ("Ende des Krankenhausbesuchs Röntgen");
+		   }
 	   }
 	   else
 	   {//Komplex 1-4
 		   //wenn nicht routine -> komplex in Komplexe Warteschlange
-		   //TODO PrioQueue für 2te behandlung
-		   myModel.behandlungKQueue.insert(this);
-	       sendTraceNote ("Komplexe Behalndlungs Warteschlange: " + myModel.behandlungKQueue.length());
+		   //einfügen in die PrioQueue für 2te behandlung
+		   myModel.prioBehandlungKQueue.insert(this);
+	       sendTraceNote ("Prioritäts Komplexe Behalndlungs Warteschlange: " + myModel.prioBehandlungKQueue.length());
 		   if (!myModel.untaetigeBehandlungKQueue.isEmpty()){
 			   //steht zur Verfügung
 			   //nimmt die erste AUfnahmekraft aus der untätigen Queue
@@ -243,6 +263,14 @@ public class Patient extends SimProcess {
 		   //warte darauf, dass Aufnahme frei wird
 		   passivate();
 		   sendTraceNote("Patient wurde 2tes mal komplex behandelt.");
+		   
+		   if (myTyp > 55 && myTyp <= 60)//aussage welche Behandlung abgeschlossen wurde
+		   {
+			   sendTraceNote ("Ende der des Krankenhausbesuchs GipsNeu");
+		   }else
+		   {
+			   sendTraceNote ("Ende des Krankenhausbesuchs Röntgen");
+		   }
 	   }
 	   
 	   }

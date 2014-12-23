@@ -45,8 +45,9 @@ public class BehandlungK extends SimProcess {
 
 	      // Aufnahme beginnt arbeit mit modellstart
 	      while (true) {
-	         // überprüfung, ob jemand wartet
-	         if (myModel.behandlungKQueue.isEmpty()) {
+	        
+	    	 // überprüfung, ob jemand wartet in der Prio oder normalen Warteschlange
+	         if (myModel.behandlungKQueue.isEmpty() && myModel.prioBehandlungKQueue.isEmpty()) {
 	        	 //keiner wartet
 	        	 //in üntätigeAufnahme Wartetschlange einfügen
 	        	 myModel.untaetigeBehandlungKQueue.insert(this);
@@ -54,7 +55,19 @@ public class BehandlungK extends SimProcess {
 	         }
 	         else {
 	        	 //ein Patient wartet
-	        	 //ersten Patienten aus der Queue nehmen
+	        	 //Einarbeitung der Priorität 
+	        	 if (!myModel.prioBehandlungKQueue.isEmpty()){
+	        		//ersten Patienten aus der PrioQueue nehmen
+		        	 Patient naechsterPatientBehK =myModel.prioBehandlungKQueue.first();
+		        	 myModel.prioBehandlungKQueue.remove(naechsterPatientBehK);
+		        	 //bearbeitung des Patienten
+		        	 hold(new TimeSpan(myModel.getBehandlungszeitK(), TimeUnit.MINUTES));
+		        	 
+		        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
+		        	 naechsterPatientBehK.activate(new TimeSpan (0.0));
+		        	 	 
+	        	 }else {
+	        	 //ersten Patienten aus der normalen Queue nehmen
 	        	 Patient naechsterPatientBehK =myModel.behandlungKQueue.first();
 	        	 myModel.behandlungKQueue.remove(naechsterPatientBehK);
 	        	 //bearbeitung des Patienten
@@ -62,7 +75,7 @@ public class BehandlungK extends SimProcess {
 	        	 
 	        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
 	        	 naechsterPatientBehK.activate(new TimeSpan (0.0));
-	        	 
+	        	 }
 	         } 
 	         }
 	      }
