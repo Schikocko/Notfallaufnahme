@@ -43,8 +43,29 @@ public class BehandlungK extends SimProcess {
 	    */
 	   public void lifeCycle() {
 
-	      // Aufnahme beginnt arbeit mit modellstart
-	      while (true) {
+		// Behandlung beginnt 30 min nach Modellstart, und 4 Stunden 30min nach Modellstart 1 Stunde Mittagspause
+		      while (true) {
+		    	  
+		    	  //blocken für die Mittagspause
+				   /**
+				    * jeder Arzt hat eine Stunde Mittagspause, ab 4.25 Simulationszeit keine 
+				    * neuen Patienten, Mittagspause unterbricht die Behandlung nicht, nach 4.30 abgefangende 
+				    * Mittagspausen dauern trotzdem eine volle Stunde
+				    */
+		          if (myModel.mittagspauseQueueK.contains(this) && (myModel.presentTime().getTimeAsDouble() > 270.0))
+		          {   
+		        	  BehandlungK mittagspauseK = this;
+		        	  //TODO 11.55-12.00  puffer einbauen
+		        //	  if(myModel.presentTime().getTimeAsDouble() < 265.0) // wenn es zwischen 11.55 und 12.00 ist
+		        //	  {
+		        //	  hold(new TimeSpan (270.0 - myModel.presentTime().getTimeAsDouble(), TimeUnit.MINUTES) ); //dann warten vom aktuellen zeitpunkt bis 12.00
+		        //	  }
+		        	  sendTraceNote("Mittagspause");
+		        	  hold(new TimeSpan (60.0));//eine Stunde warten
+		        	  myModel.mittagspauseQueueK.remove(mittagspauseK);//entfernen aus der Mittagswarteschlange, da diese erledigt wurde
+			          myModel.untaetigeBehandlungKQueue.insert(this);
+		        	  mittagspauseK.passivate();
+		          }
 	        
 	    	 // überprüfung, ob jemand wartet in der Prio oder normalen Warteschlange
 	         if (myModel.behandlungKQueue.isEmpty() && myModel.prioBehandlungKQueue.isEmpty()) {
@@ -58,7 +79,7 @@ public class BehandlungK extends SimProcess {
 	        	 //Einarbeitung der Priorität 
 	        	 if (!myModel.prioBehandlungKQueue.isEmpty()){
 	        		//ersten Patienten aus der PrioQueue nehmen
-		        	 Patient naechsterPatientBehK =myModel.prioBehandlungKQueue.first();
+		        	 Patient naechsterPatientBehK = myModel.prioBehandlungKQueue.first();
 		        	 myModel.prioBehandlungKQueue.remove(naechsterPatientBehK);
 		        	 //bearbeitung des Patienten
 		        	 hold(new TimeSpan(myModel.getBehandlungszeitK(), TimeUnit.MINUTES));
@@ -68,7 +89,7 @@ public class BehandlungK extends SimProcess {
 		        	 	 
 	        	 }else {
 	        	 //ersten Patienten aus der normalen Queue nehmen
-	        	 Patient naechsterPatientBehK =myModel.behandlungKQueue.first();
+	        	 Patient naechsterPatientBehK = myModel.behandlungKQueue.first();
 	        	 myModel.behandlungKQueue.remove(naechsterPatientBehK);
 	        	 //bearbeitung des Patienten
 	        	 hold(new TimeSpan(myModel.getBehandlungszeitK(), TimeUnit.MINUTES));

@@ -153,6 +153,16 @@ public class Process extends Model {
 	   protected desmoj.core.simulator.ProcessQueue<Roentgen> untaetigeRoentgenQueue;
 	   
 	   /**
+	    * Warteschlange für Mittagspause für Komplexe Ärzte
+	    */
+	   protected desmoj.core.simulator.ProcessQueue<BehandlungR> mittagspauseQueueR;
+	   
+	   /**
+	    * Warteschlange für Mittagspause für Komplexe Ärzte
+	    */
+	   protected desmoj.core.simulator.ProcessQueue<BehandlungK> mittagspauseQueueK;
+	   
+	   /**
 	    * Gibt ein Beispiel der Aufnahmezeit eines Patienten zurück
 	    * 
 	    * @return double Aufnahmezeitbeispiel
@@ -245,6 +255,7 @@ public class Process extends Model {
 		   {
 			   BehandlungR behandlungR = new BehandlungR(this, "routine Arzt", true);
 			   behandlungR.activate(new TimeSpan(30)); 
+			   mittagspauseQueueR.insert(behandlungR);//berechtigung für die Mittagspause
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
 		   }
 		   
@@ -253,6 +264,7 @@ public class Process extends Model {
 		   {
 		      BehandlungK behandlungK = new BehandlungK(this, "komplexer Arzt", true);
 		      behandlungK.activate(new TimeSpan(30)); 
+		      mittagspauseQueueK.insert(behandlungK); //berechtigung für die Mittagspause
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
 		   }
 		   
@@ -447,6 +459,25 @@ public class Process extends Model {
 		   // true          = show in report?
 		   // true          = show in trace?
 		   untaetigeRoentgenQueue = new ProcessQueue<Roentgen>(this, "untaetigeRoentgenQueue", true, true);
+	       
+		   // erstellt eine neue MittagspauseQueue
+		   // Parameters:
+		   // this          = belongs to this model
+		   // "mittagspauseQueue" = the name of the Queue
+		   // true          = show in report?
+		   // true          = show in trace?
+		   mittagspauseQueueR = new ProcessQueue<BehandlungR>(this, "mittagspauseQueueR", true, true);
+	       
+
+		   // erstellt eine neue MittagspauseQueue
+		   // Parameters:
+		   // this          = belongs to this model
+		   // "mittagspauseQueueK" = the name of the Queue
+		   // true          = show in report?
+		   // true          = show in trace?
+		   mittagspauseQueueK = new ProcessQueue<BehandlungK>(this, "mittagspauseQueueK", true, true);
+	   
+	   
 	   }
 	   
 	   public static void main(java.lang.String[] args) 
@@ -463,7 +494,7 @@ public class Process extends Model {
 		// Setzt die Experiment Paramenter
 		   exp.setShowProgressBar(true);  
 		   exp.stop(new TimeInstant(540, TimeUnit.MINUTES));   // Setzt die Simulationdauer auf 540 min (9 Stunden)
-		   exp.tracePeriod(new TimeInstant(0), new TimeInstant(100, TimeUnit.MINUTES));
+		   exp.tracePeriod(new TimeInstant(0), new TimeInstant(500, TimeUnit.MINUTES));
 		                                              
 		   exp.debugPeriod(new TimeInstant(0), new TimeInstant(60, TimeUnit.MINUTES));  
 		   
