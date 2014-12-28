@@ -57,11 +57,11 @@ public class BehandlungR extends SimProcess {
 	          if (myModel.mittagspauseQueueR.contains(this) && (myModel.presentTime().getTimeAsDouble() > 270.0))
 	          {   
 	        	  BehandlungR mittagspauseR = this;
-	        	  //TODO 11.55-12.00  puffer einbauen
-	        //	  if(myModel.presentTime().getTimeAsDouble() < 265.0) // wenn es zwischen 11.55 und 12.00 ist
-	        //	  {
-	        //	  hold(new TimeSpan (270.0 - myModel.presentTime().getTimeAsDouble(), TimeUnit.MINUTES) ); //dann warten vom aktuellen zeitpunkt bis 12.00
-	        //	  }
+	        	  if(myModel.presentTime().getTimeAsDouble() < 270.0) // wenn es zwischen 11.55 und 12.00 ist
+	        	  {
+	        		  sendTraceNote("Puffer vor Mittagspause");
+	                  hold(new TimeSpan (270.0 - myModel.presentTime().getTimeAsDouble(), TimeUnit.MINUTES )); //dann warten vom aktuellen zeitpunkt bis 12.00
+	        	  }
 	        	  sendTraceNote("Mittagspause");
 	        	  hold(new TimeSpan (60.0));//eine Stunde warten
 	        	  myModel.mittagspauseQueueR.remove(mittagspauseR);//entfernen aus der Mittagswarteschlange, da diese erledigt wurde

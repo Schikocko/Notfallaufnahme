@@ -52,14 +52,14 @@ public class BehandlungK extends SimProcess {
 				    * neuen Patienten, Mittagspause unterbricht die Behandlung nicht, nach 4.30 abgefangende 
 				    * Mittagspausen dauern trotzdem eine volle Stunde
 				    */
-		          if (myModel.mittagspauseQueueK.contains(this) && (myModel.presentTime().getTimeAsDouble() > 270.0))
+		          if (myModel.mittagspauseQueueK.contains(this) && (myModel.presentTime().getTimeAsDouble() >= 265.0))
 		          {   
 		        	  BehandlungK mittagspauseK = this;
-		        	  //TODO 11.55-12.00  puffer einbauen
-		        //	  if(myModel.presentTime().getTimeAsDouble() < 265.0) // wenn es zwischen 11.55 und 12.00 ist
-		        //	  {
-		        //	  hold(new TimeSpan (270.0 - myModel.presentTime().getTimeAsDouble(), TimeUnit.MINUTES) ); //dann warten vom aktuellen zeitpunkt bis 12.00
-		        //	  }
+		        	  if(myModel.presentTime().getTimeAsDouble() < 270.0) // wenn es zwischen 11.55 und 12.00 ist
+		        	  {
+		        		  sendTraceNote("Puffer vor Mittagspasue");
+		                  hold(new TimeSpan (270.0 - myModel.presentTime().getTimeAsDouble(), TimeUnit.MINUTES )); //dann warten vom aktuellen zeitpunkt bis 12.00
+		        	  }
 		        	  sendTraceNote("Mittagspause");
 		        	  hold(new TimeSpan (60.0));//eine Stunde warten
 		        	  myModel.mittagspauseQueueK.remove(mittagspauseK);//entfernen aus der Mittagswarteschlange, da diese erledigt wurde
