@@ -54,7 +54,7 @@ public class BehandlungR extends SimProcess {
 			    * neuen Patienten, Mittagspause unterbricht die Behandlung nicht, nach 4.30 abgefangende 
 			    * Mittagspausen dauern trotzdem eine volle Stunde
 			    */
-	          if (myModel.mittagspauseQueueR.contains(this) && (myModel.presentTime().getTimeAsDouble() > 270.0))
+	          if (myModel.mittagspauseQueueR.contains(this) && (myModel.presentTime().getTimeAsDouble() >= 265.0))
 	          {   
 	        	  BehandlungR mittagspauseR = this;
 	        	  if(myModel.presentTime().getTimeAsDouble() < 270.0) // wenn es zwischen 11.55 und 12.00 ist

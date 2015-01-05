@@ -30,10 +30,7 @@ public class Process extends Model {
 	    * Model parameter: Anzahl der Aufnahmekräfte
 	    */
 	   protected static int NUM_AUFN = 1;
-	   
-	   /**
-	    * Zufallszahl für die Zeit der Anknuft der Patienten
-	    */
+
 	   
 	   /**
 	    * Model Parameter: Anzahl der routine Ärtze

@@ -63,7 +63,7 @@ public class BehandlungK extends SimProcess {
 		        	  sendTraceNote("Mittagspause");
 		        	  hold(new TimeSpan (60.0));//eine Stunde warten
 		        	  myModel.mittagspauseQueueK.remove(mittagspauseK);//entfernen aus der Mittagswarteschlange, da diese erledigt wurde
-			          myModel.untaetigeBehandlungKQueue.insert(this);
+			          myModel.untaetigeBehandlungKQueue.insert(this); //Arzt wartet auf ankunft des nächsten patienten
 		        	  mittagspauseK.passivate();
 		          }
 	        

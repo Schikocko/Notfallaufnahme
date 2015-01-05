@@ -96,7 +96,7 @@ public class Patient extends SimProcess {
 			   sendTraceNote ("Routine Behalndlungs Warteschlange: " + myModel.behandlungRQueue.length());
 			   if (!myModel.untaetigeBehandlungRQueue.isEmpty()) {
 				   //steht zur Verfügung
-				   //nimmt die erste AUfnahmekraft aus der untätigen Queue
+				   //nimmt die erste routine Behandlung aus der untätigen Queue
 				   BehandlungR behandlungR = myModel.untaetigeBehandlungRQueue.first();
 				   myModel.untaetigeBehandlungRQueue.remove(behandlungR) ;
 				   
@@ -116,7 +116,7 @@ public class Patient extends SimProcess {
 		       sendTraceNote ("Komplexe Behalndlungs Warteschlange: " + myModel.behandlungKQueue.length());
 			   if (!myModel.untaetigeBehandlungKQueue.isEmpty()){
 				   //steht zur Verfügung
-				   //nimmt die erste AUfnahmekraft aus der untätigen Queue
+				   //nimmt die erste komplexe behandlung aus der untätigen Queue
 				   BehandlungK behandlungK = myModel.untaetigeBehandlungKQueue.first();
 				   myModel.untaetigeBehandlungKQueue.remove(behandlungK) ;
 				   
@@ -219,6 +219,7 @@ public class Patient extends SimProcess {
 	   
 	 //2te Behandlung nach Gips Neu oder Röntgen  
 	 //entscheidung ob komplex oder Routine, abhängig von Variable Typ, random aus 0-5 1,2 Komplex 3 4 5 routine
+	   if (myTyp < 61){
 	   if (myKomplexitaet >= 5){ // routine 5-10
 		   //wenn routine, in routine warteschlange einfügen
 		   //einfüügen in PrioQueue für 2te behandlung
@@ -272,7 +273,7 @@ public class Patient extends SimProcess {
 			   sendTraceNote ("Ende des Krankenhausbesuchs Röntgen");
 		   }
 	   }
-	   
+	   }
 	   }
 	   
 }
