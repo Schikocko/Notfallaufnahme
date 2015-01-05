@@ -57,7 +57,7 @@ public class Gips extends SimProcess {
 	        	 Patient naechsterPatient =myModel.gipsQueue.first();
 	        	 myModel.gipsQueue.remove(naechsterPatient);
 	        	 //bearbeitung des Patienten
-	        	 hold(new TimeSpan(myModel.getBehandlungszeitK(), TimeUnit.MINUTES));
+	        	 hold(new TimeSpan(myModel.getGipsZeit(), TimeUnit.MINUTES));
 	        	 
 	        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
 	        	 naechsterPatient.activate(new TimeSpan (0.0));

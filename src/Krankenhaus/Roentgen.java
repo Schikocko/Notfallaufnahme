@@ -57,7 +57,7 @@ public class Roentgen extends SimProcess {
 	        	 Patient naechsterPatient =myModel.roentgenQueue.first();
 	        	 myModel.roentgenQueue.remove(naechsterPatient);
 	        	 //bearbeitung des Patienten
-	        	 hold(new TimeSpan(myModel.getBehandlungszeitK(), TimeUnit.MINUTES));
+	        	 hold(new TimeSpan(myModel.getRoentgenZeit(), TimeUnit.MINUTES));
 	        	 
 	        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
 	        	 naechsterPatient.activate(new TimeSpan (0.0));

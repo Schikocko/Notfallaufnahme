@@ -35,9 +35,9 @@ public class Patient extends SimProcess {
 	      myModel = (Process)owner;
 	      //Zuordnung der Typen
 	      //1-35 Röntgen 36-55 GipsENtfernen 56-60 GipsNeu 61-100 Wunderverband
-	      typ =  new ContDistUniform(myModel, "Behandlungstyp", 1, 100, true, true);
+	      typ =  new ContDistUniform(myModel, "Behandlungstyp", 1, 100, false, true);
 	      //1-4 Komplex 5-10 Routine
-	      komplexitaet = new ContDistUniform(myModel, "Komplexität", 1, 10, true, true);
+	      komplexitaet = new ContDistUniform(myModel, "Komplexität", 1, 10, false, true);
 	   }
 	   
 	   //gibt den Behandlungstyp zurück, für spätere Fallentscheidnung, wo es als nächestes hingeht
@@ -219,7 +219,7 @@ public class Patient extends SimProcess {
 	   
 	 //2te Behandlung nach Gips Neu oder Röntgen  
 	 //entscheidung ob komplex oder Routine, abhängig von Variable Typ, random aus 0-5 1,2 Komplex 3 4 5 routine
-	   if (myTyp < 61){
+	   if ((myTyp <= 35)  || (myTyp > 56 && myTyp <= 60)){
 	   if (myKomplexitaet >= 5){ // routine 5-10
 		   //wenn routine, in routine warteschlange einfügen
 		   //einfüügen in PrioQueue für 2te behandlung
