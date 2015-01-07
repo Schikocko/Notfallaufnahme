@@ -60,7 +60,7 @@ public class BehandlungR extends SimProcess {
 	        	  if(myModel.presentTime().getTimeAsDouble() < 270.0) // wenn es zwischen 11.55 und 12.00 ist
 	        	  {
 	        		  sendTraceNote("Puffer vor Mittagspause");
-	                  hold(new TimeSpan (270.0 - myModel.presentTime().getTimeAsDouble(), TimeUnit.MINUTES )); //dann warten vom aktuellen zeitpunkt bis 12.00
+	        		  hold(new TimeInstant (270, TimeUnit.MINUTES )); //dann warten vom aktuellen zeitpunkt bis 12.00
 	        	  }
 	        	  sendTraceNote("Mittagspause");
 	        	  hold(new TimeSpan (60.0));//eine Stunde warten
