@@ -1,57 +1,56 @@
-<!DOCTYPE html>
-<html><head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="Author" content="Tim Lechler">
-<meta name="GENERATOR" content="DESMO-J 2.4.2">
-<title>.\Notfallaufnahme_report.html</title></head>
-<body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B" alink="#FF0000">
-<a name="top"></a><br />
-<p></p><h2><div align="center">Notfallaufnahme Report</div></h2><p></p><div align="center"><h3>Model Modell einer Notfallaufnahme</h3></div>
-<table border="0" cellspacing="0" cellpadding="3" width="100%">
-<tr valign="top"><td><b><div align="left">Description</div></b></td></tr>
-<tr valign="top"><td>Einfaches Modell einer Notfallaufnahme mit mehreren Behandlungsräumen, Verschieden Patiententypen und 2 Typen von Ärtzen</td></tr>
-</table><p></p>
-<font size="-1"><a href="#top">top</a></font><p></p>
-<hr><div align="center"><h3>Simulation Run</h3></div>
-<table border="0" cellspacing="0" cellpadding="3" width="100%">
-<tr valign="top"><td><b><div align="left">Property</div></b></td><td><b><div align="left">Content</div></b></td></tr>
-<tr valign="top"></tr>
-<tr valign="top"><td>Simulation duration</td><td>Experiment run from 0.0000 until 540.0000.</td></tr>
-<tr valign="top"><td>Computation duration (HH:MM:SS)</td><td>00:00:01</td></tr>
-<tr valign="top"><td>Resets</td><td>No resets during the experiment run.</td></tr>
-<tr valign="top"><td>Seed</td><td>979</td></tr>
-<tr valign="top"><td>Errors</td><td>No errors or warnings have occurred.</td></tr>
-</table><p></p>
-<font size="-1"><a href="#top">top</a></font><p></p>
-<hr><div align="center"><h3>Queues</h3></div>
-<table border="0" cellspacing="0" cellpadding="3" width="100%">
-<tr valign="top"><td><b><div align="left">Title</div></b></td><td><b><div align="left">Qorder</div></b></td><td><b><div align="left">(Re)set</div></b></td><td><b><div align="left">Obs</div></b></td><td><b><div align="left">QLimit</div></b></td><td><b><div align="left">Qmax</div></b></td><td><b><div align="left">Qnow</div></b></td><td><b><div align="left">Qavg.</div></b></td><td><b><div align="left">Zeros</div></b></td><td><b><div align="left">max.Wait</div></b></td><td><b><div align="left">avg.Wait</div></b></td><td><b><div align="left">refus.</div></b></td></tr>
-<tr valign="top"><td>aufnahmeQueue</td><td>FIFO</td><td>0.0000</td><td>486</td><td>unlimit.</td><td>9</td><td>0</td><td>0.60954</td><td>210</td><td>6.1166</td><td>0.6666</td><td>0</td></tr>
-<tr valign="top"><td>behandlungRQueue</td><td>FIFO</td><td>0.0000</td><td>211</td><td>unlimit.</td><td>81</td><td>79</td><td>39.29164</td><td>0</td><td>136.0833</td><td>75.6500</td><td>0</td></tr>
-<tr valign="top"><td>prioBehandlungRQueue</td><td>FIFO</td><td>0.0000</td><td>70</td><td>unlimit.</td><td>4</td><td>0</td><td>0.70395</td><td>0</td><td>68.0333</td><td>5.4166</td><td>0</td></tr>
-<tr valign="top"><td>behandlungKQueue</td><td>FIFO</td><td>0.0000</td><td>146</td><td>unlimit.</td><td>61</td><td>50</td><td>30.20201</td><td>0</td><td>166.8500</td><td>87.0000</td><td>0</td></tr>
-<tr valign="top"><td>prioBehandlungKQueue</td><td>FIFO</td><td>0.0000</td><td>55</td><td>unlimit.</td><td>3</td><td>0</td><td>0.36901</td><td>0</td><td>57.7166</td><td>3.6166</td><td>0</td></tr>
-<tr valign="top"><td>gipsQueue</td><td>FIFO</td><td>0.0000</td><td>80</td><td>unlimit.</td><td>9</td><td>7</td><td>1.57056</td><td>19</td><td>33.7333</td><td>8.9333</td><td>0</td></tr>
-<tr valign="top"><td>roentgenQueue</td><td>FIFO</td><td>0.0000</td><td>156</td><td>unlimit.</td><td>5</td><td>0</td><td>0.23139</td><td>102</td><td>7.7000</td><td>0.8000</td><td>0</td></tr>
-<tr valign="top"><td>untaetigeAufnahmeQueue</td><td>FIFO</td><td>0.0000</td><td>204</td><td>unlimit.</td><td>1</td><td>1</td><td>0.44389</td><td>1</td><td>7.0500</td><td>1.1666</td><td>0</td></tr>
-<tr valign="top"><td>untaetigeBehandlungRQueue</td><td>FIFO</td><td>0.0000</td><td>2</td><td>unlimit.</td><td>2</td><td>0</td><td>0.01568</td><td>0</td><td>4.7833</td><td>4.2333</td><td>0</td></tr>
-<tr valign="top"><td>untaetigeBehandlungKQueue</td><td>FIFO</td><td>0.0000</td><td>2</td><td>unlimit.</td><td>2</td><td>0</td><td>0.00238</td><td>0</td><td>0.7000</td><td>0.6333</td><td>0</td></tr>
-<tr valign="top"><td>untaetigeGipsQueue</td><td>FIFO</td><td>0.0000</td><td>19</td><td>unlimit.</td><td>1</td><td>0</td><td>0.30216</td><td>0</td><td>52.8500</td><td>8.5833</td><td>0</td></tr>
-<tr valign="top"><td>untaetigeRoentgenQueue</td><td>FIFO</td><td>0.0000</td><td>102</td><td>unlimit.</td><td>2</td><td>0</td><td>0.96975</td><td>4</td><td>50.8666</td><td>5.1333</td><td>0</td></tr>
-<tr valign="top"><td>mittagspauseQueueR</td><td>FIFO</td><td>0.0000</td><td>2</td><td>unlimit.</td><td>2</td><td>0</td><td>1.22219</td><td>0</td><td>330.0000</td><td>329.9833</td><td>0</td></tr>
-<tr valign="top"><td>mittagspauseQueueK</td><td>FIFO</td><td>0.0000</td><td>2</td><td>unlimit.</td><td>2</td><td>0</td><td>1.22898</td><td>0</td><td>332.1666</td><td>331.8166</td><td>0</td></tr>
-</table><p></p>
-<font size="-1"><a href="#top">top</a></font><p></p>
-<hr><div align="center"><h3>Distributions</h3></div>
-<table border="0" cellspacing="0" cellpadding="3" width="100%">
-<tr valign="top"><td><b><div align="left">Title</div></b></td><td><b><div align="left">(Re)set</div></b></td><td><b><div align="left">Obs</div></b></td><td><b><div align="left">Type</div></b></td><td><b><div align="left">Parameter 1</div></b></td><td><b><div align="left">Parameter 2</div></b></td><td><b><div align="left">Parameter 3</div></b></td><td><b><div align="left">Seed</div></b></td></tr>
-<tr valign="top"><td>AufnahmezeitStream</td><td>0.0000</td><td>486</td><td>Cont Exponential</td><td>0.6</td><td> </td><td> </td><td>71529105</td></tr>
-<tr valign="top"><td>patientAnkunftszeitStream</td><td>0.0000</td><td>486</td><td>Cont Exponential</td><td>1.2</td><td> </td><td> </td><td>91080577</td></tr>
-<tr valign="top"><td>behandlungszeitKStream</td><td>0.0000</td><td>201</td><td>Cont Exponential</td><td>4.6</td><td> </td><td> </td><td>43946618</td></tr>
-<tr valign="top"><td>behandlungszeitRStream</td><td>0.0000</td><td>281</td><td>Cont Exponential</td><td>3.2</td><td> </td><td> </td><td>44944377</td></tr>
-<tr valign="top"><td>gipsZeitStream</td><td>0.0000</td><td>80</td><td>Cont Exponential</td><td>3.8</td><td> </td><td> </td><td>38440435</td></tr>
-<tr valign="top"><td>roentgenZeitStream</td><td>0.0000</td><td>156</td><td>Cont Exponential</td><td>3.5</td><td> </td><td> </td><td>9050595</td></tr>
-</table><p></p>
-<font size="-1"><a href="#top">top</a></font><p></p>
-<font size="-2">created using <a href="http://www.desmoj.de">DESMO-J</A> Version 2.4.2 at Wed Jan 07 14:55:40 CET 2015 - DESMO-J is licensed under <A HREF=http://www.apache.org/licenses/LICENSE-2.0>Apache License, Version 2.0</A></font>
-</body></html>
+<HTML><HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Author" CONTENT="Tim Lechler">
+<META NAME="GENERATOR" CONTENT="DESMO-J 2.4.1">
+<TITLE>.\Notfallaufnahme_report.html</TITLE></HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#0000EE" VLINK="#551A8B" ALINK="#FF0000">
+<A NAME="top"></A><br>
+<P><H2><DIV align=center>Notfallaufnahme Report</DIV></H2><P><DIV align=center><H3>Model Modell einer Notfallaufnahme</H3></DIV>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<TR VALIGN=TOP><TD><B><DIV align=left>Description</DIV></B></TD></TR>
+<TR VALIGN=TOP><TD>Einfaches Modell einer Notfallaufnahme mit mehreren Behandlungsräumen, Verschieden Patiententypen und 2 Typen von Ärtzen</TD></TR>
+</TABLE><P>
+<FONT SIZE=-1><A HREF=#top>top</A></FONT><P>
+<HR><DIV align=center><H3>Simulation Run</H3></DIV>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<TR VALIGN=TOP><TD><B><DIV align=left>Property</DIV></B></TD><TD><B><DIV align=left>Content</DIV></B></TD></TR>
+<TR VALIGN=TOP></TR>
+<TR VALIGN=TOP><TD>Simulation duration</TD><TD>Experiment run from 0.0000 until 540.0000.</TD></TR>
+<TR VALIGN=TOP><TD>Computation duration (HH:MM:SS)</TD><TD>00:00:00</TD></TR>
+<TR VALIGN=TOP><TD>Resets</TD><TD>No resets during the experiment run.</TD></TR>
+<TR VALIGN=TOP><TD>Seed</TD><TD>979</TD></TR>
+<TR VALIGN=TOP><TD>Errors</TD><TD>No errors or warnings have occurred.</TD></TR>
+</TABLE><P>
+<FONT SIZE=-1><A HREF=#top>top</A></FONT><P>
+<HR><DIV align=center><H3>Queues</H3></DIV>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<TR VALIGN=TOP><TD><B><DIV align=left>Title</DIV></B></TD><TD><B><DIV align=left>Qorder</DIV></B></TD><TD><B><DIV align=left>(Re)set</DIV></B></TD><TD><B><DIV align=left>Obs</DIV></B></TD><TD><B><DIV align=left>QLimit</DIV></B></TD><TD><B><DIV align=left>Qmax</DIV></B></TD><TD><B><DIV align=left>Qnow</DIV></B></TD><TD><B><DIV align=left>Qavg.</DIV></B></TD><TD><B><DIV align=left>Zeros</DIV></B></TD><TD><B><DIV align=left>max.Wait</DIV></B></TD><TD><B><DIV align=left>avg.Wait</DIV></B></TD><TD><B><DIV align=left>refus.</DIV></B></TD></TR>
+<TR VALIGN=TOP><TD>aufnahmeQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>433</TD><TD>unlimit.</TD><TD>7</TD><TD>0</TD><TD>0.40515</TD><TD>238</TD><TD>4.5333</TD><TD>0.5000</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>behandlungRQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>219</TD><TD>unlimit.</TD><TD>53</TD><TD>35</TD><TD>27.61133</TD><TD>0</TD><TD>119.5333</TD><TD>60.0333</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>prioBehandlungRQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>74</TD><TD>unlimit.</TD><TD>6</TD><TD>1</TD><TD>0.69253</TD><TD>0</TD><TD>67.7500</TD><TD>5.0333</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>behandlungKQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>139</TD><TD>unlimit.</TD><TD>53</TD><TD>40</TD><TD>25.18207</TD><TD>2</TD><TD>149.3833</TD><TD>76.7166</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>prioBehandlungKQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>53</TD><TD>unlimit.</TD><TD>2</TD><TD>0</TD><TD>0.3425</TD><TD>1</TD><TD>66.9833</TD><TD>3.4833</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>gipsQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>86</TD><TD>unlimit.</TD><TD>9</TD><TD>0</TD><TD>1.61932</TD><TD>22</TD><TD>34.8333</TD><TD>10.1666</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>roentgenQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>156</TD><TD>unlimit.</TD><TD>14</TD><TD>0</TD><TD>0.95309</TD><TD>83</TD><TD>22.2833</TD><TD>3.2833</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>untaetigeAufnahmeQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>238</TD><TD>unlimit.</TD><TD>1</TD><TD>1</TD><TD>0.50719</TD><TD>1</TD><TD>5.3000</TD><TD>1.1333</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>untaetigeBehandlungRQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>2</TD><TD>unlimit.</TD><TD>1</TD><TD>0</TD><TD>0.00299</TD><TD>0</TD><TD>1.1666</TD><TD>0.8000</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>untaetigeBehandlungKQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>5</TD><TD>unlimit.</TD><TD>2</TD><TD>0</TD><TD>0.04512</TD><TD>0</TD><TD>6.6000</TD><TD>4.8666</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>untaetigeGipsQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>22</TD><TD>unlimit.</TD><TD>1</TD><TD>1</TD><TD>0.35969</TD><TD>0</TD><TD>77.9833</TD><TD>8.4500</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>untaetigeRoentgenQueue</TD><TD>FIFO</TD><TD>0.0000</TD><TD>83</TD><TD>unlimit.</TD><TD>2</TD><TD>2</TD><TD>0.80299</TD><TD>4</TD><TD>73.3000</TD><TD>5.0833</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>mittagspauseQueueR</TD><TD>FIFO</TD><TD>0.0000</TD><TD>2</TD><TD>unlimit.</TD><TD>2</TD><TD>0</TD><TD>1.2391</TD><TD>0</TD><TD>337.8833</TD><TD>334.5500</TD><TD>0</TD></TR>
+<TR VALIGN=TOP><TD>mittagspauseQueueK</TD><TD>FIFO</TD><TD>0.0000</TD><TD>2</TD><TD>unlimit.</TD><TD>2</TD><TD>0</TD><TD>1.22222</TD><TD>0</TD><TD>330.0000</TD><TD>330.0000</TD><TD>0</TD></TR>
+</TABLE><P>
+<FONT SIZE=-1><A HREF=#top>top</A></FONT><P>
+<HR><DIV align=center><H3>Distributions</H3></DIV>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<TR VALIGN=TOP><TD><B><DIV align=left>Title</DIV></B></TD><TD><B><DIV align=left>(Re)set</DIV></B></TD><TD><B><DIV align=left>Obs</DIV></B></TD><TD><B><DIV align=left>Type</DIV></B></TD><TD><B><DIV align=left>Parameter 1</DIV></B></TD><TD><B><DIV align=left>Parameter 2</DIV></B></TD><TD><B><DIV align=left>Parameter 3</DIV></B></TD><TD><B><DIV align=left>Seed</DIV></B></TD></TR>
+<TR VALIGN=TOP><TD>AufnahmezeitStream</TD><TD>0.0000</TD><TD>433</TD><TD>Cont Exponential</TD><TD>0.6</TD><TD> </TD><TD> </TD><TD>71529105</TD></TR>
+<TR VALIGN=TOP><TD>patientAnkunftszeitStream</TD><TD>0.0000</TD><TD>433</TD><TD>Cont Exponential</TD><TD>1.2</TD><TD> </TD><TD> </TD><TD>91080577</TD></TR>
+<TR VALIGN=TOP><TD>behandlungszeitKStream</TD><TD>0.0000</TD><TD>192</TD><TD>Cont Exponential</TD><TD>4.6</TD><TD> </TD><TD> </TD><TD>43946618</TD></TR>
+<TR VALIGN=TOP><TD>behandlungszeitRStream</TD><TD>0.0000</TD><TD>293</TD><TD>Cont Exponential</TD><TD>3.2</TD><TD> </TD><TD> </TD><TD>44944377</TD></TR>
+<TR VALIGN=TOP><TD>gipsZeitStream</TD><TD>0.0000</TD><TD>86</TD><TD>Cont Exponential</TD><TD>3.8</TD><TD> </TD><TD> </TD><TD>38440435</TD></TR>
+<TR VALIGN=TOP><TD>roentgenZeitStream</TD><TD>0.0000</TD><TD>156</TD><TD>Cont Exponential</TD><TD>3.5</TD><TD> </TD><TD> </TD><TD>9050595</TD></TR>
+</TABLE><P>
+<FONT SIZE=-1><A HREF=#top>top</A></FONT><P>
+<FONT SIZE=-2>created using <A HREF=http://www.desmoj.de>DESMO-J</A> Version 2.4.1 at Sun Jan 11 19:18:41 CET 2015 - DESMO-J is licensed under <A HREF=http://www.apache.org/licenses/LICENSE-2.0>Apache License, Version 2.0</A></FONT>
+</BODY></HTML>

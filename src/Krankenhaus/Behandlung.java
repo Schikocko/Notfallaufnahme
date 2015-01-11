@@ -3,13 +3,19 @@ import java.util.concurrent.TimeUnit;
 
 import desmoj.core.simulator.*;
 
-public class BehandlungR extends SimProcess {
+public class Behandlung extends SimProcess {
 	
 	/**
 	 * routine Behandlung der Patienten
 	 */
 	
-	private Process myModel;
+	private Notfallaufnahme myModel;
+	//Queues der Behandlung, abhängig vom typen
+	public desmoj.core.simulator.ProcessQueue<Patient> behandlungsQueue;
+	public desmoj.core.simulator.ProcessQueue<Patient> prioBehandlungQueue;
+	public desmoj.core.simulator.ProcessQueue<Behandlung> untaetigeBehandlungsQueue;
+	public desmoj.core.simulator.ProcessQueue<Behandlung> mittagsPausenQueue;
+	private String typ;
 	
 	/**
 	    * Constructor der routine Behandlung
@@ -21,11 +27,52 @@ public class BehandlungR extends SimProcess {
 	    * @param showInTrace flag to indicate if this process shall produce output
 	    *                    for the trace
 	    */
-	   public BehandlungR(Model owner, String name, boolean showInTrace) {
+	   public Behandlung(Model owner, String name, boolean showInTrace) {
 
 	      super(owner, name, showInTrace);
 	      // speichert den referenz, zu welchem Modell die Aufnhame gehört
-	      myModel = (Process)owner;
+	      myModel = (Notfallaufnahme)owner;
+	   }
+	   
+	   /**
+	    * Setzt die Queue auf eine spezell vorbvereite
+	    * 
+	    * 
+	    * @param qu die Queue wird übergeben
+	    */
+	   public void setBehandlungsQueue (desmoj.core.simulator.ProcessQueue<Patient> qu)
+	   {
+		  behandlungsQueue = qu; 
+	   }
+	   
+	   public void setUntaetigerBehandlungsQueue (desmoj.core.simulator.ProcessQueue<Behandlung> qu)
+	   {
+		  untaetigeBehandlungsQueue = qu; 
+	   }
+	   
+	   public void setPrioQueue  (desmoj.core.simulator.ProcessQueue<Patient> qu)
+	   {
+		   prioBehandlungQueue = qu;
+	   }
+	   
+	   public void setMittagsPausenQueue  (desmoj.core.simulator.ProcessQueue <Behandlung> qu)
+	   {
+		   mittagsPausenQueue = qu;
+	   }
+	   //variable des Typen, für die Zeit
+	   public void setTyp (String t)
+	   {
+		   typ = t;
+	   }
+	   //überprüft den Typen und gibt die entsprechende Bearbeitungszeit zurück
+	   public double setBehandlungsZeit()
+	   {
+		   if (typ == "BehandlungK")
+		   {
+			   return myModel.getBehandlungszeitK();
+		   }else
+			   return myModel.getBehandlungszeitR();
+		
 	   }
 	   
 	   /**
@@ -54,9 +101,9 @@ public class BehandlungR extends SimProcess {
 			    * neuen Patienten, Mittagspause unterbricht die Behandlung nicht, nach 4.30 abgefangende 
 			    * Mittagspausen dauern trotzdem eine volle Stunde
 			    */
-	          if (myModel.mittagspauseQueueR.contains(this) && (myModel.presentTime().getTimeAsDouble() >= 265.0))
+	          if (mittagsPausenQueue.contains(this) && (myModel.presentTime().getTimeAsDouble() >= 265.0))
 	          {   
-	        	  BehandlungR mittagspauseR = this;
+	        	  Behandlung mittagspause = this;
 	        	  if(myModel.presentTime().getTimeAsDouble() < 270.0) // wenn es zwischen 11.55 und 12.00 ist
 	        	  {
 	        		  sendTraceNote("Puffer vor Mittagspause");
@@ -64,41 +111,41 @@ public class BehandlungR extends SimProcess {
 	        	  }
 	        	  sendTraceNote("Mittagspause");
 	        	  hold(new TimeSpan (60.0));//eine Stunde warten
-	        	  myModel.mittagspauseQueueR.remove(mittagspauseR);//entfernen aus der Mittagswarteschlange, da diese erledigt wurde
-		          myModel.untaetigeBehandlungRQueue.insert(this);
-	        	  mittagspauseR.passivate();
+	        	  mittagsPausenQueue.remove(mittagspause);//entfernen aus der Mittagswarteschlange, da diese erledigt wurde
+	        	  untaetigeBehandlungsQueue.insert(this);
+	        	  mittagspause.passivate();
 	          }
 	        	  
 	         // überprüfung, ob jemand in einer der beiden Queues wartet
-	         if (myModel.behandlungRQueue.isEmpty() && myModel.prioBehandlungRQueue.isEmpty()) {
+	         if (behandlungsQueue.isEmpty() && prioBehandlungQueue.isEmpty()) {
 	        	 //keiner wartet
 	        	 //in üntätigeAufnahme Wartetschlange einfügen
-	        	 myModel.untaetigeBehandlungRQueue.insert(this);
+	        	 untaetigeBehandlungsQueue.insert(this);
 	        	 passivate(); //warte bis vom Patient reaktiviert
 	         }
 	         else {
-	        	 if (!myModel.prioBehandlungRQueue.isEmpty())
+	        	 if (!prioBehandlungQueue.isEmpty())
 	        	 {
 	        		//ein Patient wartet in der PrioQueue
 		        	 //ersten Patienten aus der Queue nehmen
-		        	 Patient naechsterPatientBehR = myModel.prioBehandlungRQueue.first();
-		        	 myModel.prioBehandlungRQueue.remove(naechsterPatientBehR);
+		        	 Patient naechsterPatientBeh = prioBehandlungQueue.first();
+		        	 prioBehandlungQueue.remove(naechsterPatientBeh);
 		        	 //bearbeitung des Patienten
-		        	 hold(new TimeSpan(myModel.getBehandlungszeitR(), TimeUnit.MINUTES));
+		        	 hold(new TimeSpan(setBehandlungsZeit(), TimeUnit.MINUTES));
 		        	 
 		        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
-		        	 naechsterPatientBehR.activate(new TimeSpan (0.0));
+		        	 naechsterPatientBeh.activate(new TimeSpan (0.0));
 	        	 }else
 	        	 {
 	        	 //ein Patient wartet in der normalen Queue
 	        	 //ersten Patienten aus der Queue nehmen
-	        	 Patient naechsterPatientBehR = myModel.behandlungRQueue.first();
-	        	 myModel.behandlungRQueue.remove(naechsterPatientBehR);
+	        	 Patient naechsterPatientBeh = behandlungsQueue.first();
+	        	 behandlungsQueue.remove(naechsterPatientBeh);
 	        	 //bearbeitung des Patienten
-	        	 hold(new TimeSpan(myModel.getBehandlungszeitR(), TimeUnit.MINUTES));
+	        	 hold(new TimeSpan(setBehandlungsZeit(), TimeUnit.MINUTES));
 	        	 
 	        	 //wird reaktiviert, nachdem die bearbeitungszeit abgeschlossen ist
-	        	 naechsterPatientBehR.activate(new TimeSpan (0.0));
+	        	 naechsterPatientBeh.activate(new TimeSpan (0.0));
 	        	 	        	 	        	 
 	        	 }
 	         } 

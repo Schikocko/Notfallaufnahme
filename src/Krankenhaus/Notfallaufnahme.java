@@ -4,7 +4,7 @@ import desmoj.core.simulator.*;
 import desmoj.core.dist.*;
 import java.util.concurrent.TimeUnit;
 
-public class Process extends Model {
+public class Notfallaufnahme extends Model {
 	
 	/**
 	    * Process constructor.
@@ -20,7 +20,7 @@ public class Process extends Model {
 	    * @param showInTrace flag to indicate if this model shall produce output 
 	    *                    to the trace file
 	    */
-	   public Process(Model owner, String modelName, boolean showInReport, boolean showInTrace) 
+	   public Notfallaufnahme(Model owner, String modelName, boolean showInReport, boolean showInTrace) 
 	   {
 	      super(owner, modelName, showInReport, showInTrace);
 	   }
@@ -127,37 +127,37 @@ public class Process extends Model {
 	   /**
 	    * Warteschlange für untätige Aufnahmekräfte, sie warten auf die Ankunft neuer Patienten
 	    */
-	   protected desmoj.core.simulator.ProcessQueue<Aufnahme> untaetigeAufnahmeQueue;
+	   protected desmoj.core.simulator.ProcessQueue<Angestellter> untaetigeAufnahmeQueue;
 	   
 	   /**
 	    * Warteschlange für untätige routine Ärtze, sie warten auf die Ankunft neuer Patienten
 	    */
-	   protected desmoj.core.simulator.ProcessQueue<BehandlungR> untaetigeBehandlungRQueue;
+	   protected desmoj.core.simulator.ProcessQueue<Behandlung> untaetigeBehandlungRQueue;
 	   
 	   /**
 	    * Warteschlange für untätige komplexe Ärtze, sie warten auf die Ankunft neuer Patienten
 	    */
-	   protected desmoj.core.simulator.ProcessQueue<BehandlungK> untaetigeBehandlungKQueue;
+	   protected desmoj.core.simulator.ProcessQueue<Behandlung> untaetigeBehandlungKQueue;
 	   
 	   /**
 	    * Warteschlange für untätige Gips, sie warten auf die Ankunft neuer Patienten
 	    */
-	   protected desmoj.core.simulator.ProcessQueue<Gips> untaetigeGipsQueue;
+	   protected desmoj.core.simulator.ProcessQueue<Angestellter> untaetigeGipsQueue;
 	  
 	   /**
 	    * Warteschlange für untätige Röntgen, sie warten auf die Ankunft neuer Patienten
 	    */
-	   protected desmoj.core.simulator.ProcessQueue<Roentgen> untaetigeRoentgenQueue;
+	   protected desmoj.core.simulator.ProcessQueue<Angestellter> untaetigeRoentgenQueue;
 	   
 	   /**
 	    * Warteschlange für Mittagspause für Komplexe Ärzte
 	    */
-	   protected desmoj.core.simulator.ProcessQueue<BehandlungR> mittagspauseQueueR;
+	   protected desmoj.core.simulator.ProcessQueue<Behandlung> mittagspauseQueueR;
 	   
 	   /**
 	    * Warteschlange für Mittagspause für Komplexe Ärzte
 	    */
-	   protected desmoj.core.simulator.ProcessQueue<BehandlungK> mittagspauseQueueK;
+	   protected desmoj.core.simulator.ProcessQueue<Behandlung> mittagspauseQueueK;
 	   
 	   /**
 	    * Gibt ein Beispiel der Aufnahmezeit eines Patienten zurück
@@ -242,43 +242,71 @@ public class Process extends Model {
 		// erstellt und aktiviert die gegebene Anzahl an Aufnahmekräften
 		   for (int i=0; i < NUM_AUFN; i++)
 		   {
-		      Aufnahme aufnahme = new Aufnahme(this, "Aufnahmekraft", true);
+		      Angestellter aufnahme = new Angestellter(this, "Aufnahmekraft", true);
 		      aufnahme.activate(new TimeSpan(0));
 		         // Wird sofort aktiviert, da die Aufnahme sofort anfängt zu Arbeiten
+		      //definieren des Angestellten und zuordnen der Queues
+		      aufnahme.setAngestellterQueue(aufnahmeQueue); 
+		      aufnahme.setUntaetigerAngestellterQueue(untaetigeAufnahmeQueue);	 
+		      aufnahme.setTyp("Aufnahme");
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an routine Ärzten
 		   for (int i=0; i < NUM_DOC_R; i++)
 		   {
-			   BehandlungR behandlungR = new BehandlungR(this, "routine Arzt", true);
+			   Behandlung behandlungR = new Behandlung(this, "routine Arzt", true);
 			   behandlungR.activate(new TimeSpan(30)); 
 			   mittagspauseQueueR.insert(behandlungR);//berechtigung für die Mittagspause
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
+			   
+			 //definieren der Behandlung und zuordnen der Queues
+		      behandlungR.setBehandlungsQueue(behandlungRQueue);
+		      behandlungR.setUntaetigerBehandlungsQueue(untaetigeBehandlungRQueue);
+		      behandlungR.setPrioQueue(prioBehandlungRQueue);
+		      behandlungR.setMittagsPausenQueue(mittagspauseQueueR);	
+		      behandlungR.setTyp("BehandlungR");
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an komplexen Ärzten
 		   for (int i=0; i < NUM_DOC_K; i++)
 		   {
-		      BehandlungK behandlungK = new BehandlungK(this, "komplexer Arzt", true);
+		      Behandlung behandlungK = new Behandlung(this, "komplexer Arzt", true);
 		      behandlungK.activate(new TimeSpan(30)); 
 		      mittagspauseQueueK.insert(behandlungK); //berechtigung für die Mittagspause
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
+		      
+				 //definieren der Behandlung und zuordnen der Queues
+		      behandlungK.setBehandlungsQueue(behandlungKQueue);
+		      behandlungK.setUntaetigerBehandlungsQueue(untaetigeBehandlungKQueue);
+		      behandlungK.setPrioQueue(prioBehandlungKQueue);
+		      behandlungK.setMittagsPausenQueue(mittagspauseQueueK);
+		      behandlungK.setTyp("BehandlungK");
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an Gipspflegern
 		   for (int i=0; i < NUM_GIPS; i++)
 		   {
-		      Gips gips = new Gips(this, "Gipspfleger", true);
+			  Angestellter gips = new Angestellter(this, "Gipspfleger", true);
 		      gips.activate(new TimeSpan(30)); 
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
+		   
+		      //definieren des Angestellten und zuordnen der Queues
+		      gips.setAngestellterQueue(gipsQueue);
+		      gips.setUntaetigerAngestellterQueue(untaetigeGipsQueue);
+		      gips.setTyp("Gips");
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an Röntgengeräten
 		   for (int i=0; i < NUM_XRAY; i++)
 		   {
-		      Roentgen roentgen = new Roentgen(this, "Roentgen", true);
+			  Angestellter roentgen = new Angestellter(this, "Roentgen", true);
 		      roentgen.activate(new TimeSpan(30)); 
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
+		      
+		    //definieren des Angestellten und zuordnen der Queues
+		      roentgen.setAngestellterQueue(roentgenQueue);
+		      roentgen.setUntaetigerAngestellterQueue(untaetigeRoentgenQueue);
+		      roentgen.setTyp("Roentgen");
 		   }
 		   
 		   
@@ -423,7 +451,7 @@ public class Process extends Model {
 		   // "untaetigeAufnahmeQueue" = the name of the Queue
 		   // true          = show in report?
 		   // true          = show in trace?
-		   untaetigeAufnahmeQueue = new ProcessQueue<Aufnahme>(this, "untaetigeAufnahmeQueue", true, true);
+		   untaetigeAufnahmeQueue = new ProcessQueue<Angestellter>(this, "untaetigeAufnahmeQueue", true, true);
 		   
 		   // erstellt eine neue untaetigeBehandlungRQueue
 		   // Parameters:
@@ -431,7 +459,7 @@ public class Process extends Model {
 		   // "untaetigeBehandlungRQueue" = the name of the Queue
 		   // true          = show in report?
 		   // true          = show in trace?
-		   untaetigeBehandlungRQueue = new ProcessQueue<BehandlungR>(this, "untaetigeBehandlungRQueue", true, true);
+		   untaetigeBehandlungRQueue = new ProcessQueue<Behandlung>(this, "untaetigeBehandlungRQueue", true, true);
 		   
 		   // erstellt eine neue untaetigeBehandlungKQueue
 		   // Parameters:
@@ -439,7 +467,7 @@ public class Process extends Model {
 		   // "untaetigeBehandlungKQueue" = the name of the Queue
 		   // true          = show in report?
 		   // true          = show in trace?
-		   untaetigeBehandlungKQueue = new ProcessQueue<BehandlungK>(this, "untaetigeBehandlungKQueue", true, true);
+		   untaetigeBehandlungKQueue = new ProcessQueue<Behandlung>(this, "untaetigeBehandlungKQueue", true, true);
 		   
 		   // erstellt eine neue untaetigeGipsQueue
 		   // Parameters:
@@ -447,7 +475,7 @@ public class Process extends Model {
 		   // "untaetigeGipsQueue" = the name of the Queue
 		   // true          = show in report?
 		   // true          = show in trace?
-		   untaetigeGipsQueue = new ProcessQueue<Gips>(this, "untaetigeGipsQueue", true, true);
+		   untaetigeGipsQueue = new ProcessQueue<Angestellter>(this, "untaetigeGipsQueue", true, true);
 		   
 		   // erstellt eine neue untaetigeRoentgenQueue
 		   // Parameters:
@@ -455,7 +483,7 @@ public class Process extends Model {
 		   // "untaetigeRoentgenQueue" = the name of the Queue
 		   // true          = show in report?
 		   // true          = show in trace?
-		   untaetigeRoentgenQueue = new ProcessQueue<Roentgen>(this, "untaetigeRoentgenQueue", true, true);
+		   untaetigeRoentgenQueue = new ProcessQueue<Angestellter>(this, "untaetigeRoentgenQueue", true, true);
 	       
 		   // erstellt eine neue MittagspauseQueue
 		   // Parameters:
@@ -463,7 +491,7 @@ public class Process extends Model {
 		   // "mittagspauseQueue" = the name of the Queue
 		   // true          = show in report?
 		   // true          = show in trace?
-		   mittagspauseQueueR = new ProcessQueue<BehandlungR>(this, "mittagspauseQueueR", true, true);
+		   mittagspauseQueueR = new ProcessQueue<Behandlung>(this, "mittagspauseQueueR", true, true);
 	       
 
 		   // erstellt eine neue MittagspauseQueue
@@ -472,7 +500,7 @@ public class Process extends Model {
 		   // "mittagspauseQueueK" = the name of the Queue
 		   // true          = show in report?
 		   // true          = show in trace?
-		   mittagspauseQueueK = new ProcessQueue<BehandlungK>(this, "mittagspauseQueueK", true, true);
+		   mittagspauseQueueK = new ProcessQueue<Behandlung>(this, "mittagspauseQueueK", true, true);
 	   
 	   
 	   }
@@ -480,7 +508,7 @@ public class Process extends Model {
 	   public static void main(java.lang.String[] args) 
 	   {
 		// erstellt Modell and Experiment
-		   Process model = new Process(null, "Modell einer Notfallaufnahme", true, true);
+		   Notfallaufnahme model = new Notfallaufnahme(null, "Modell einer Notfallaufnahme", true, true);
 		  
 		   //Erstellt das Experiment
 		   Experiment exp = new Experiment("Notfallaufnahme", TimeUnit.SECONDS, TimeUnit.MINUTES, null);

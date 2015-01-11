@@ -17,7 +17,7 @@ public class Patient extends SimProcess {
 	
 	private desmoj.core.dist.ContDistUniform komplexitaet;
 	
-	private Process myModel;
+	private Notfallaufnahme myModel;
 	   /**
 	    * Constructor der Patienten 
 	    *
@@ -32,7 +32,7 @@ public class Patient extends SimProcess {
 
 	      super(owner, name, showInTrace);
 	      //speichert den referenz, zu welchem Modell die Aufnhame gehört
-	      myModel = (Process)owner;
+	      myModel = (Notfallaufnahme)owner;
 	      //Zuordnung der Typen
 	      //1-35 Röntgen 36-55 GipsENtfernen 56-60 GipsNeu 61-100 Wunderverband
 	      typ =  new ContDistUniform(myModel, "Behandlungstyp", 1, 100, false, true);
@@ -75,7 +75,7 @@ public class Patient extends SimProcess {
 		   if (!myModel.untaetigeAufnahmeQueue.isEmpty()) {
 			   //steht zur Verfügung
 			   //nimmt die erste AUfnahmekraft aus der untätigen Queue
-			   Aufnahme aufnahme = myModel.untaetigeAufnahmeQueue.first();
+			   Angestellter aufnahme = myModel.untaetigeAufnahmeQueue.first();
 			   myModel.untaetigeAufnahmeQueue.remove(aufnahme) ;
 			   
 			   //als Nächster beareitet werden
@@ -97,7 +97,7 @@ public class Patient extends SimProcess {
 			   if (!myModel.untaetigeBehandlungRQueue.isEmpty()) {
 				   //steht zur Verfügung
 				   //nimmt die erste routine Behandlung aus der untätigen Queue
-				   BehandlungR behandlungR = myModel.untaetigeBehandlungRQueue.first();
+				   Behandlung behandlungR = myModel.untaetigeBehandlungRQueue.first();
 				   myModel.untaetigeBehandlungRQueue.remove(behandlungR) ;
 				   
 				   //als Nächster beareitet werden
@@ -117,7 +117,7 @@ public class Patient extends SimProcess {
 			   if (!myModel.untaetigeBehandlungKQueue.isEmpty()){
 				   //steht zur Verfügung
 				   //nimmt die erste komplexe behandlung aus der untätigen Queue
-				   BehandlungK behandlungK = myModel.untaetigeBehandlungKQueue.first();
+				   Behandlung behandlungK = myModel.untaetigeBehandlungKQueue.first();
 				   myModel.untaetigeBehandlungKQueue.remove(behandlungK) ;
 				   
 				   //als Nächster beareitet werden
@@ -140,7 +140,7 @@ public class Patient extends SimProcess {
 		   if (!myModel.untaetigeGipsQueue.isEmpty()) {
 			   //steht zur Verfügung
 			   //nimmt den ersten Gipspfleger aus der untätigen Queue
-			   Gips gips = myModel.untaetigeGipsQueue.first();
+			   Angestellter gips = myModel.untaetigeGipsQueue.first();
 			   myModel.untaetigeGipsQueue.remove(gips) ;
 			   
 			   //als Nächster beareitet werden
@@ -162,7 +162,7 @@ public class Patient extends SimProcess {
 		   if (!myModel.untaetigeRoentgenQueue.isEmpty()) {
 			   //steht zur Verfügung
 			   //nimmt den ersten Gipspfleger aus der untätigen Queue
-			   Roentgen roentgen = myModel.untaetigeRoentgenQueue.first();
+			   Angestellter roentgen = myModel.untaetigeRoentgenQueue.first();
 			   myModel.untaetigeRoentgenQueue.remove(roentgen) ;
 			   
 			   //als Nächster beareitet werden
@@ -184,7 +184,7 @@ public class Patient extends SimProcess {
 		   if (!myModel.untaetigeGipsQueue.isEmpty()) {
 			   //steht zur Verfügung
 			   //nimmt den ersten Gipspfleger aus der untätigen Queue
-			   Gips gips = myModel.untaetigeGipsQueue.first();
+			   Angestellter gips = myModel.untaetigeGipsQueue.first();
 			   myModel.untaetigeGipsQueue.remove(gips) ;
 			   
 			   //als Nächster beareitet werden
@@ -206,7 +206,7 @@ public class Patient extends SimProcess {
 		   if (!myModel.untaetigeRoentgenQueue.isEmpty()) {
 			   //steht zur Verfügung
 			   //nimmt den ersten Gipspfleger aus der untätigen Queue
-			   Roentgen roentgen = myModel.untaetigeRoentgenQueue.first();
+			   Angestellter roentgen = myModel.untaetigeRoentgenQueue.first();
 			   myModel.untaetigeRoentgenQueue.remove(roentgen) ;
 			   
 			   //als Nächster beareitet werden
@@ -228,7 +228,7 @@ public class Patient extends SimProcess {
 		   if (!myModel.untaetigeBehandlungRQueue.isEmpty()) {
 			   //steht zur Verfügung
 			   //nimmt die erste AUfnahmekraft aus der untätigen Queue
-			   BehandlungR behandlungR = myModel.untaetigeBehandlungRQueue.first();
+			   Behandlung behandlungR = myModel.untaetigeBehandlungRQueue.first();
 			   myModel.untaetigeBehandlungRQueue.remove(behandlungR) ;
 			   
 			   //als Nächster beareitet werden
@@ -255,7 +255,7 @@ public class Patient extends SimProcess {
 		   if (!myModel.untaetigeBehandlungKQueue.isEmpty()){
 			   //steht zur Verfügung
 			   //nimmt die erste AUfnahmekraft aus der untätigen Queue
-			   BehandlungK behandlungK = myModel.untaetigeBehandlungKQueue.first();
+			   Behandlung behandlungK = myModel.untaetigeBehandlungKQueue.first();
 			   myModel.untaetigeBehandlungKQueue.remove(behandlungK) ;
 			   
 			   //als Nächster beareitet werden

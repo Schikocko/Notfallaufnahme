@@ -28,7 +28,7 @@ public class PatientenErsteller extends SimProcess
 	   public void lifeCycle() {
 
 		      // wird dem modell zugewiesen, in festgelegem Abstand
-		      Process model = (Process)getModel();
+		      Notfallaufnahme model = (Notfallaufnahme)getModel();
 		      // endless loop:
 		      while (true) {
 
