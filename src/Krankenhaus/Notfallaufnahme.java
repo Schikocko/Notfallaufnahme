@@ -323,7 +323,7 @@ public class Notfallaufnahme extends Model {
 		   // Parameters:
 		   // this                          = belongs to this model
 		   // "patientAnkunftszeitStream"   = the name of the stream
-		   // 0.6                           = Durchschnittszeit in der neue Patienten das System betreten
+		   // 1.2                           = Durchschnittszeit in der neue Patienten das System betreten
 		   // true                          = show in report?
 		   // false                         = show in trace?
 		   patientAnkunftszeit= new ContDistExponential(this, "patientAnkunftszeitStream", 1.2 , true, false);
@@ -507,11 +507,12 @@ public class Notfallaufnahme extends Model {
 		   exp.tracePeriod(new TimeInstant(0), new TimeInstant(500, TimeUnit.MINUTES));
 		                                              
 		   exp.debugPeriod(new TimeInstant(0), new TimeInstant(60, TimeUnit.MINUTES));  
-		   
+
 		   //startet das Experiment bei 0.0
 		   exp.start();
 		   exp.report(); //erstellt den Report
 		   exp.finish();//beenedet das Experiment und alle noch laufenden Teile
+		   
 	   }
 
 

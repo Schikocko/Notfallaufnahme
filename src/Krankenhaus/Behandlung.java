@@ -11,10 +11,10 @@ public class Behandlung extends SimProcess {
 	
 	private Notfallaufnahme myModel;
 	//Queues der Behandlung, abhängig vom typen
-	public desmoj.core.simulator.ProcessQueue<Patient> behandlungsQueue;
-	public desmoj.core.simulator.ProcessQueue<Patient> prioBehandlungQueue;
-	public desmoj.core.simulator.ProcessQueue<Behandlung> untaetigeBehandlungsQueue;
-	public desmoj.core.simulator.ProcessQueue<Behandlung> mittagsPausenQueue;
+	private desmoj.core.simulator.ProcessQueue<Patient> behandlungsQueue;
+	private desmoj.core.simulator.ProcessQueue<Patient> prioBehandlungQueue;
+	private desmoj.core.simulator.ProcessQueue<Behandlung> untaetigeBehandlungsQueue;
+	private desmoj.core.simulator.ProcessQueue<Behandlung> mittagsPausenQueue;
 	private String typ;
 	
 	/**
@@ -39,6 +39,7 @@ public class Behandlung extends SimProcess {
 	      untaetigeBehandlungsQueue = untaetBQueue;
 	      prioBehandlungQueue = prioBQueue;
 	      mittagsPausenQueue = mQueue;
+	      typ = t ;
 	      
 	   }
 
