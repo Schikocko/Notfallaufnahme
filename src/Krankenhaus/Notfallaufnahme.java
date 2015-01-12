@@ -500,6 +500,7 @@ public class Notfallaufnahme extends Model {
 		   
 		   //verbindet das Modell und das Experiment
 		   model.connectToExperiment(exp);
+		   exp.setSeedGenerator(6857521);
 		   
 		// Setzt die Experiment Paramenter
 		   exp.setShowProgressBar(true);  
@@ -507,8 +508,9 @@ public class Notfallaufnahme extends Model {
 		   exp.tracePeriod(new TimeInstant(0), new TimeInstant(500, TimeUnit.MINUTES));
 		                                              
 		   exp.debugPeriod(new TimeInstant(0), new TimeInstant(60, TimeUnit.MINUTES));  
-
+		   
 		   //startet das Experiment bei 0.0
+		   
 		   exp.start();
 		   exp.report(); //erstellt den Report
 		   exp.finish();//beenedet das Experiment und alle noch laufenden Teile
