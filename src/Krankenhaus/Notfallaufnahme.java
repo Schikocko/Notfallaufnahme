@@ -242,71 +242,56 @@ public class Notfallaufnahme extends Model {
 		// erstellt und aktiviert die gegebene Anzahl an Aufnahmekräften
 		   for (int i=0; i < NUM_AUFN; i++)
 		   {
-		      Angestellter aufnahme = new Angestellter(this, "Aufnahmekraft", true);
+			      //definieren des Angestellten und zuordnen der Queues
+		      Angestellter aufnahme = new Angestellter(this, "Aufnahmekraft", true, aufnahmeQueue, untaetigeAufnahmeQueue, "Aufnahme" );
 		      aufnahme.activate(new TimeSpan(0));
 		         // Wird sofort aktiviert, da die Aufnahme sofort anfängt zu Arbeiten
-		      //definieren des Angestellten und zuordnen der Queues
-		      aufnahme.setAngestellterQueue(aufnahmeQueue); 
-		      aufnahme.setUntaetigerAngestellterQueue(untaetigeAufnahmeQueue);	 
-		      aufnahme.setTyp("Aufnahme");
+
+
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an routine Ärzten
 		   for (int i=0; i < NUM_DOC_R; i++)
 		   {
-			   Behandlung behandlungR = new Behandlung(this, "routine Arzt", true);
+			   Behandlung behandlungR = new Behandlung(this, "routine Arzt", true, behandlungRQueue,prioBehandlungRQueue, 
+					   untaetigeBehandlungRQueue, mittagspauseQueueR, "BehandlungR" );
 			   behandlungR.activate(new TimeSpan(30)); 
 			   mittagspauseQueueR.insert(behandlungR);//berechtigung für die Mittagspause
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
 			   
-			 //definieren der Behandlung und zuordnen der Queues
-		      behandlungR.setBehandlungsQueue(behandlungRQueue);
-		      behandlungR.setUntaetigerBehandlungsQueue(untaetigeBehandlungRQueue);
-		      behandlungR.setPrioQueue(prioBehandlungRQueue);
-		      behandlungR.setMittagsPausenQueue(mittagspauseQueueR);	
-		      behandlungR.setTyp("BehandlungR");
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an komplexen Ärzten
 		   for (int i=0; i < NUM_DOC_K; i++)
 		   {
-		      Behandlung behandlungK = new Behandlung(this, "komplexer Arzt", true);
+		      Behandlung behandlungK = new Behandlung(this, "komplexer Arzt", true, behandlungKQueue, prioBehandlungKQueue,
+		    		  untaetigeBehandlungKQueue , mittagspauseQueueK , "BehandlungK" );
 		      behandlungK.activate(new TimeSpan(30)); 
 		      mittagspauseQueueK.insert(behandlungK); //berechtigung für die Mittagspause
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
 		      
-				 //definieren der Behandlung und zuordnen der Queues
-		      behandlungK.setBehandlungsQueue(behandlungKQueue);
-		      behandlungK.setUntaetigerBehandlungsQueue(untaetigeBehandlungKQueue);
-		      behandlungK.setPrioQueue(prioBehandlungKQueue);
-		      behandlungK.setMittagsPausenQueue(mittagspauseQueueK);
-		      behandlungK.setTyp("BehandlungK");
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an Gipspflegern
 		   for (int i=0; i < NUM_GIPS; i++)
 		   {
-			  Angestellter gips = new Angestellter(this, "Gipspfleger", true);
+			  Angestellter gips = new Angestellter(this, "Gipspfleger", true, gipsQueue, untaetigeGipsQueue, "Gips" );
 		      gips.activate(new TimeSpan(30)); 
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
 		   
 		      //definieren des Angestellten und zuordnen der Queues
-		      gips.setAngestellterQueue(gipsQueue);
-		      gips.setUntaetigerAngestellterQueue(untaetigeGipsQueue);
-		      gips.setTyp("Gips");
+
 		   }
 		   
 			// erstellt und aktiviert die gegebene Anzahl an Röntgengeräten
 		   for (int i=0; i < NUM_XRAY; i++)
 		   {
-			  Angestellter roentgen = new Angestellter(this, "Roentgen", true);
+			  Angestellter roentgen = new Angestellter(this, "Roentgen", true, roentgenQueue, untaetigeRoentgenQueue, "Roentgen" );
 		      roentgen.activate(new TimeSpan(30)); 
 		         // Wird nach 30min aktiviert, da die Ärtze erst 30min nach Beginnt mit den behandlungen anfangen
 		      
 		    //definieren des Angestellten und zuordnen der Queues
-		      roentgen.setAngestellterQueue(roentgenQueue);
-		      roentgen.setUntaetigerAngestellterQueue(untaetigeRoentgenQueue);
-		      roentgen.setTyp("Roentgen");
+
 		   }
 		   
 		   

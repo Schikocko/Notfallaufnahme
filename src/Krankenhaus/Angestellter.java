@@ -10,8 +10,8 @@ public class Angestellter extends SimProcess {
 	 */
 	private Notfallaufnahme myModel;
 	//Die blankoQueue, werden unten mit den Queues des entsprechnenden Typens gefüllt
-	public desmoj.core.simulator.ProcessQueue<Patient> angestellterQueue;
-	public desmoj.core.simulator.ProcessQueue<Angestellter> untaetigerAngestellterQueue;
+	private desmoj.core.simulator.ProcessQueue<Patient> angestellterQueue;
+	private desmoj.core.simulator.ProcessQueue<Angestellter> untaetigerAngestellterQueue;
 	//Typ des Angestellten, um die richtige Bearbeitungsdauer zu bestimmen
 	private String typ; 
 	
@@ -24,33 +24,18 @@ public class Angestellter extends SimProcess {
 	    * @param showInTrace flag to indicate if this process shall produce output
 	    *                    for the trace
 	    */
-	   public Angestellter(Model owner, String name, boolean showInTrace) {
+	   public Angestellter(Model owner, String name, boolean showInTrace, desmoj.core.simulator.ProcessQueue<Patient> anQueue, //Queue für wartende Patienten
+			   desmoj.core.simulator.ProcessQueue<Angestellter> untaetQueue, String t  ) { // untaetQueue = Wartschlange für untaetige Angestellte, t= typ für die zuordnung der Behandlungzeit
 
 	      super(owner, name, showInTrace);
 	      myModel = (Notfallaufnahme)owner;
+	      angestellterQueue = anQueue;
+	      untaetigerAngestellterQueue = untaetQueue;
+	      typ = t;
 	   	   }
-	   /**
-	    * Setzt die Queue auf dem speziellen Typ Gips/Roentgen/Aufnahme
-	    * 
-	    * 
-	    * @param qu
-	    */
-	   public void setAngestellterQueue (desmoj.core.simulator.ProcessQueue<Patient> qu)
-	   {
-		  angestellterQueue = qu; 
-	   }
-	   
-	   public void setUntaetigerAngestellterQueue (desmoj.core.simulator.ProcessQueue<Angestellter> qu)
-	   {
-		  untaetigerAngestellterQueue = qu; 
-	   }
-	   //Varibale des Typen
-	   public void setTyp (String t)
-	   {
-		   typ = t;
-	   }
+
 	   //überprüft den Typen und gibt die entsprechende Bearbeitungszeit zurück
-	   public double setTime()
+	   private double setTime()
 	   {
 		   if (typ == "Aufnahme")
 		   {

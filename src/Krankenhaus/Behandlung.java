@@ -27,45 +27,23 @@ public class Behandlung extends SimProcess {
 	    * @param showInTrace flag to indicate if this process shall produce output
 	    *                    for the trace
 	    */
-	   public Behandlung(Model owner, String name, boolean showInTrace) {
+	   public Behandlung(Model owner, String name, boolean showInTrace, desmoj.core.simulator.ProcessQueue<Patient> bQueue, //angeben der standart queue für Patienten
+			   desmoj.core.simulator.ProcessQueue<Patient> prioBQueue, //angeben der PrioQueue für Patienten, die ein 2tes mal behandelt werden sollen
+			   desmoj.core.simulator.ProcessQueue<Behandlung> untaetBQueue, // Queue für untaetige Ärzte
+			   desmoj.core.simulator.ProcessQueue<Behandlung> mQueue, String t ) { //Queue für die berechtigung für dich Mittagspause, t= Typ zur zuordnung der richtigen Behandlungszeit
 
 	      super(owner, name, showInTrace);
 	      // speichert den referenz, zu welchem Modell die Aufnhame gehört
 	      myModel = (Notfallaufnahme)owner;
+	      behandlungsQueue = bQueue;
+	      untaetigeBehandlungsQueue = untaetBQueue;
+	      prioBehandlungQueue = prioBQueue;
+	      mittagsPausenQueue = mQueue;
+	      
 	   }
-	   
-	   /**
-	    * Setzt die Queue auf eine spezell vorbvereite
-	    * 
-	    * 
-	    * @param qu die Queue wird übergeben
-	    */
-	   public void setBehandlungsQueue (desmoj.core.simulator.ProcessQueue<Patient> qu)
-	   {
-		  behandlungsQueue = qu; 
-	   }
-	   
-	   public void setUntaetigerBehandlungsQueue (desmoj.core.simulator.ProcessQueue<Behandlung> qu)
-	   {
-		  untaetigeBehandlungsQueue = qu; 
-	   }
-	   
-	   public void setPrioQueue  (desmoj.core.simulator.ProcessQueue<Patient> qu)
-	   {
-		   prioBehandlungQueue = qu;
-	   }
-	   
-	   public void setMittagsPausenQueue  (desmoj.core.simulator.ProcessQueue <Behandlung> qu)
-	   {
-		   mittagsPausenQueue = qu;
-	   }
-	   //variable des Typen, für die Zeit
-	   public void setTyp (String t)
-	   {
-		   typ = t;
-	   }
+
 	   //überprüft den Typen und gibt die entsprechende Bearbeitungszeit zurück
-	   public double setBehandlungsZeit()
+	   private double setBehandlungsZeit()
 	   {
 		   if (typ == "BehandlungK")
 		   {
