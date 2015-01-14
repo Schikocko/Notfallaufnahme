@@ -82,7 +82,6 @@ public class Behandlung extends SimProcess {
 			    */
 	          if (mittagsPausenQueue.contains(this) && (myModel.presentTime().getTimeAsDouble() >= 265.0))
 	          {   
-	        	  Behandlung mittagspause = this;
 	        	  if(myModel.presentTime().getTimeAsDouble() < 270.0) // wenn es zwischen 11.55 und 12.00 ist
 	        	  {
 	        		  sendTraceNote("Puffer vor Mittagspause");
@@ -90,9 +89,8 @@ public class Behandlung extends SimProcess {
 	        	  }
 	        	  sendTraceNote("Mittagspause");
 	        	  hold(new TimeSpan (60.0));//eine Stunde warten
-	        	  mittagsPausenQueue.remove(mittagspause);//entfernen aus der Mittagswarteschlange, da diese erledigt wurde
-	        	  untaetigeBehandlungsQueue.insert(this);
-	        	  mittagspause.passivate();
+	        	  mittagsPausenQueue.remove(this);//entfernen aus der Mittagswarteschlange, da diese erledigt wurde
+	        	  //danach wird der Lifecycle weiter durchlaufen
 	          }
 	        	  
 	         // überprüfung, ob jemand in einer der beiden Queues wartet
